@@ -360,7 +360,7 @@ def indices_valeurs_comprises(tableau, valeur_min, valeur_max):
 
 def moyenne_psth_par_frequence(psth, mock_freq, unique_tones, min_presentations):
     
-     
+     # a verifier avant d'utiliser
     """"
     Fonction qui, pour toutes les fréquences de la bandwidth d'un neurone, fait la moyenne par mock frequency.
        Args:
@@ -389,3 +389,50 @@ def moyenne_psth_par_frequence(psth, mock_freq, unique_tones, min_presentations)
             psth_per_frequency.append(np.nan)
             n_presentations.append(n)
     return psth_per_frequency, n_presentations
+
+
+
+def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_width, good_clusters, condition):
+    """
+    Pour voir, pour chaque neurone, renvoie la moyenne des psth pour toutes les fréquences comprises dans la badnwidth du cluster
+    
+    input: 
+      -data, features, good_clustersn condition ("tracking" or "playback), bandwidth
+    output : 
+     - une liste contenant le psth moyen par cluster [cluster x [t_pre, t_post] ] in la bandwidth
+      et une autre out la bandwidth
+    """
+    psth_bins = np.arange(-t_pre, t_post + bin_width, bin_width)
+    
+    if condition=="tracking":
+        c = 0
+    elif condition == "playback" : 
+        c=1
+    elif condition== "tail":
+        c = -1
+    elif condition =="mapping change":
+        c = 2
+        
+    
+    in_psth, out_psth=[] , []
+    for idx, cluster in enumerate(good_clusters):
+        psth_clus, out_clus = [], []
+        low_f, high_f = bandwidth[idx][0],  bandwidth[idx][1]
+        for bin in range(len(features)):
+            #print(diff)
+            if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
+                if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==c:
+                    if low_f<=features[bin]['Played_frequency']<=high_f:
+                        psth_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                    else:
+                        out_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+        if len(psth_clus)==0:
+            psth_clus = [[np.nan]*(len(psth_bins)-1)]*2
+        if len(out_clus)==0:
+            out_clus = [[np.nan]*(len(psth_bins)-1)]*2
+        in_psth.append(np.nanmean(psth_clus, axis=0))
+        out_psth.append(np.nanmean(out_clus, axis=0))
+       
+    return in_psth, out_psth    
+    
+
