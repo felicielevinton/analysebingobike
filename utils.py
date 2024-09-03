@@ -16,6 +16,30 @@ def est_premier(nombre):
         i += 6
     return True
 
+def get_plot_coords(channel_number):
+    """
+    Fonction qui calcule la position en 2D d'un canal sur une Microprobe.
+    Retourne la ligne et la colonne.
+    """
+    if channel_number in list(range(8)):
+        row = 3
+        col = channel_number % 8
+
+    elif channel_number in list(range(8, 16)):
+        row = 1
+        col = 7 - channel_number % 8
+
+    elif channel_number in list(range(16, 24)):
+        row = 0
+        col = 7 - channel_number % 8
+
+    else:
+        row = 2
+        col = channel_number % 8
+
+    return row, col
+
+
 
 def get_plot_geometry(good_clusters):
     n_clus = len(good_clusters)
@@ -247,6 +271,37 @@ def get_indexes_in(tableau, a, b):
             indices_a.append(i)
 
     return indices_a
+
+
+def get_psth_for_indexes(data, features, indexes, t_pre, t_post, bin_width, good_clusters, condition):
+    """
+    Pour voir, pour chaque neurone, les psth
+    
+    input: 
+      -data, features, good_clustersn condition ("tracking" or "playback), indexes (les indices des bin qui nous intéressent)
+    output : 
+     - une liste contenant le psth moyen par cluster pour chaque changement de fréquence en playback [neurones x chgt de freq x [t_pre, t_post] ]
+    """
+    if condition=="tracking":
+        c = 0
+    elif condition == "playback" : 
+        c=1
+    elif condition== "tail":
+        c = -1
+    elif condition =="mapping change":
+        c = 2
+    
+    
+    psth=[] 
+    for cluster in good_clusters:
+        psth_clus = []
+        for bin in indexes:
+            #print(diff)
+            if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
+                if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==c :
+                    psth_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+        psth.append(psth_clus)
+    return psth
 
 
 
