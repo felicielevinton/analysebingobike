@@ -1,13 +1,9 @@
 from kneed import DataGenerator, KneeLocator
-from quick_extract import *
-from get_data import *
-from load_rhd import *
 import matplotlib.pyplot as plt
-from ExtractRecordings.manual.simple_sort import*
 import pandas as pd
-from PostProcessing.tools.utils import *
+#from PostProcessing.tools.utils import *
 import json
-n_blocs = 10
+import numpy as np
 
 """""
 Contient les fonctions nécessaires pour formater les données

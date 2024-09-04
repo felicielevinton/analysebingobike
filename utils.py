@@ -1,5 +1,7 @@
 import numpy as np
 from scipy.signal import find_peaks
+import os
+import json
 
 
 def est_premier(nombre):
@@ -305,6 +307,65 @@ def get_psth_for_indexes(data, features, indexes, t_pre, t_post, bin_width, good
 
 
 
+def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_width, good_clusters, condition):
+    """
+    Pour voir, pour chaque neurone, renvoie la moyenne des psth pour toutes les fréquences comprises dans la badnwidth du cluster
+    
+    input: 
+      -data, features, good_clustersn condition ("tracking" or "playback), bandwidth
+    output : 
+     - une liste contenant le psth moyen par cluster [cluster x [t_pre, t_post] ] in la bandwidth
+      et une autre out la bandwidth
+    """
+    psth_bins = np.arange(-t_pre, t_post + bin_width, bin_width)
+    
+    if condition=="tracking":
+        c = 0
+    else : 
+        c=1
+        
+    
+    in_psth, out_psth=[] , []
+    for idx, cluster in enumerate(good_clusters):
+        psth_clus, out_clus = [], []
+        low_f, high_f = bandwidth[idx][0],  bandwidth[idx][1]
+        for bin in range(len(features)):
+            #print(diff)
+            if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
+                if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==c:
+                    if low_f<=features[bin]['Played_frequency']<=high_f:
+                        psth_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                    else:
+                        out_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+        if len(psth_clus)==0:
+            psth_clus = [[np.nan]*(len(psth_bins)-1)]*2
+        if len(out_clus)==0:
+            out_clus = [[np.nan]*(len(psth_bins)-1)]*2
+        in_psth.append(np.nanmean(psth_clus, axis=0))
+        out_psth.append(np.nanmean(out_clus, axis=0))
+       
+    return in_psth, out_psth    
+
+
+def get_sem(neurones):
+    """""
+    Fonction qui renvoie la sem pour un tableau de format (neurones x bin)
+    
+    input : un tableau [neurones, bins]
+    output: liste [bins] contenant la SEM
+    """
+    sem = []
+    for bin in range(len(neurones[0])):
+        sem.append(np.nanstd(np.array(neurones)[:,bin])/np.sqrt(len(neurones)))
+    return sem  
+
+
+
+
+
+
+
+
 
 
 def get_sustained_activity_OLD(psth, t_pre, t_post, bin_width):
@@ -436,3 +497,36 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
     return in_psth, out_psth    
     
 
+def get_session_type_final(path):
+    """
+    Fonction qui renvoie le type de la session parmi TrackingOnly, PlaybackOnly etc
+    elle va chercher dans le fichier json le type de session
+    """
+    # List all files in the folder
+    files = os.listdir(path)
+
+    # Filter JSON files
+    json_files = [file for file in files if file.endswith('.json')]
+    # Check if only one JSON file is found
+    if len(json_files) == 1:
+        json_file_path = os.path.join(path, json_files[0])
+        print("Found JSON file:", json_file_path)
+        # Load the JSON data from file
+        with open(json_file_path, 'r') as f:
+            data = json.load(f)
+        # Extract the "Type" field
+        try : 
+            type_value = data['Block_000']['Type']
+
+            if type_value=="Pause":
+                type_value = data['Block_001']['Type']
+                
+            print("Type:", type_value)
+        except :
+            type_value = [data[key]["Type"] for key in data if key.startswith("Experiment_")][1]
+            print("Type:", type_value)       
+            
+            
+    else:
+        print("Error: No JSON files found.")
+    return type_value
