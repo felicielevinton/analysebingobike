@@ -217,7 +217,7 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
         for bin in range(len(features)):
             #print(diff)
             if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
-                if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==c:
+                if features[bin]['Frequency_changes']>0 and  features[bin]['Condition']==c:
                     if low_f<=features[bin]['Played_frequency']<=high_f:
                         psth_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
                     else:
@@ -230,10 +230,6 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
         out_psth.append(np.nanmean(out_clus, axis=0))
        
     return in_psth, out_psth    
-    
-
-
-
 
     
 def get_playback_indexes(features):
@@ -283,7 +279,7 @@ def get_mean_neurone_in_bandwidth(data, features, t_pre, t_post, bandwidth, bin_
             pass
         else:
             mean_psth_tr, mean_psth_pb = [], []
-            for bin in range(len(features)):
+            for bin in range(len(data[0])):
                 if features[bin]['Frequency_changes']>0 and bd[0]<=features[bin]['Played_frequency']<=bd[1] and features[bin]['Condition']==0:
                     mean_psth_tr.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
                 if features[bin]['Frequency_changes']>0 and bd[0]<=features[bin]['Played_frequency']<=bd[1] and features[bin]['Condition']==1:
@@ -291,7 +287,6 @@ def get_mean_neurone_in_bandwidth(data, features, t_pre, t_post, bandwidth, bin_
             tracking.append(np.nanmean(mean_psth_tr, axis=0))
             playback.append(np.nanmean(mean_psth_pb, axis=0))
     return tracking, playback
-
 
 
 def get_mean_neurone_out_bandwidth(data, features, t_pre, t_post, bandwidth, bin_width, good_clusters):
