@@ -530,3 +530,32 @@ def get_session_type_final(path):
     else:
         print("Error: No JSON files found.")
     return type_value
+
+
+
+def get_mean_neurone_spaced_frequency(data, features, t_pre, t_post, bin_width, good_clusters):
+    """
+    Fonction qui renvoie le psth moyen (tracking et playback) par neurone
+    Attention ici je ne prends que les changements de fréquence qui sont 
+    séparés de plus de 200ms (pour vérifier que les oscillations sont bien
+    dûes aux changements de fréquence précédents le stim d'intéret)
+    --> si tu veux l'utiliser : change l'appel à la fonction dans get_mean_psth
+    input: fichier data.npy d'une session, features.npy, t_post, t_pre, bin_width, fichier ggod_playback_clusters.npy
+    output : 2 listes [neurones, bins] pour tracking et playabck
+    
+    """
+    tracking, playback=[], []    
+    for cluster in good_clusters:
+        mean_psth_tr, mean_psth_pb = [], []
+        previousbin=0
+        for bin in range(len(features)):
+            if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
+                if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==0 and bin-previousbin>0.2/bin_width:
+                    mean_psth_tr.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                    previousbin=bin
+                if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==1 and bin-previousbin>0.2/bin_width:
+                    mean_psth_pb.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                    previousbin=bin
+        tracking.append(np.nanmean(mean_psth_tr, axis=0))
+        playback.append(np.nanmean(mean_psth_pb, axis=0))
+    return tracking, playback

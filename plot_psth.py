@@ -50,3 +50,28 @@ for cluster in range(num_plots):
         axes[row, col].plot(psth_bins, np.nanmean(playback[cluster], axis=0), c = 'black')
         axes[row, col].axvline(0, c = 'grey', linestyle='--')
         axes[row, col].set_title(f'Cluster {cluster}')
+plt.savefig(path+'headstage_0/psth_cluster.png')
+plt.close()
+
+# la moyenne sur tous les clusters
+c_tracking = np.nanmean(tracking, axis=0)
+c_playback = np.nanmean(playback, axis=0)
+
+m_tracking = np.nanmean(c_tracking, axis=0)
+m_playback = np.nanmean(c_playback, axis=0)
+
+sem_tr = get_sem(c_tracking)
+sem_pb = get_sem(c_playback)
+
+plt.plot(psth_bins, m_tracking, c = 'red', label = 'tracking')
+plt.plot(psth_bins, m_playback, c = 'black',  label = 'playback')
+plt.fill_between(psth_bins, m_tracking - sem_tr, m_tracking + sem_tr, color='red', alpha=0.2)
+plt.fill_between(psth_bins, m_playback - sem_pb, m_playback + sem_pb, color='black', alpha=0.2)
+plt.title('Tracking vs playback (Average over all clusters)')
+plt.xlabel('Time [s]')
+plt.ylabel('[spikes/s]')
+plt.gca().spines['top'].set_visible(False)
+plt.gca().spines['right'].set_visible(False)
+plt.legend()
+
+plt.savefig(path+'headstage_0/psth_average.png')

@@ -71,10 +71,10 @@ def get_mean_neurone_spaced_frequency(data, features, t_pre, t_post, bin_width, 
         mean_psth_tr, mean_psth_pb = [], []
         previousbin=0
         for bin in range(len(features)):
-            if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==0 and bin-previousbin>0.2/bin_width:
+            if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==0 and bin-previousbin>t_pre/bin_width:
                 mean_psth_tr.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
                 previousbin=bin
-            if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==1 and bin-previousbin>0.2/bin_width:
+            if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==1 and bin-previousbin>t_pre/bin_width:
                 mean_psth_pb.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
                 previousbin=bin
         tracking.append(np.nanmean(mean_psth_tr, axis=0))
