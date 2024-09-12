@@ -19,7 +19,7 @@ bin_width = 0.005
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 #gc = np.arange(0, 32)
 
-path = '/mnt/working2/felicie/data2/eTheremin/ALTAI/ALTAI_20240814_SESSION_00/'
+path = '/mnt/working2/felicie/data2/eTheremin/ALTAI/ALTAI_20240725_SESSION_00/'
 
 data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)
 features = np.load(path+'headstage_0/features_0.005.npy', allow_pickle=True)

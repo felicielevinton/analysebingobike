@@ -82,22 +82,6 @@ def get_mean_neurone_spaced_frequency(data, features, t_pre, t_post, bin_width, 
     return tracking, playback
 
 
-def get_mean_neurone_for_block(data, features, block, t_pre, t_post, bin_width, good_clusters):
-    """
-    Fonction qui renvoie le psth moyen (tracking et playback) par neurone
-    pour un block en particulier (block = block)
-    """
-    tracking, playback=[], []    
-    for cluster in good_clusters:
-        mean_psth_tr, mean_psth_pb = [], []
-        for bin in range(len(features)):
-            if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==0 and features[bin]['Block']==block:
-                mean_psth_tr.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
-            if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==1 and features[bin]['Block']==block:
-                mean_psth_pb.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
-        tracking.append(np.nanmean(mean_psth_tr, axis=0))
-        playback.append(np.nanmean(mean_psth_pb, axis=0))
-    return tracking, playback
 
 
 def get_mean_neurone_indexes(data, features, indexes,  t_pre, t_post, bin_width, good_clusters):
