@@ -120,6 +120,20 @@ def detect_peak(hm, cluster):
     peak_position = res["groups0"][0][0]  # tuple qui indique la position du pic.
     return hm_clean, peak_position
 
+
+def get_contour(hm, threshold):
+    """"
+    Fonction qui détermine les contours d'une heatmap
+    
+    input : une heatmap d'un cluster (hm), threshold : sensibilité pour la détection de contour
+    output: renvoie les coordonnées du/des contour(s)
+    """
+    # Find contours in the heatmap
+    contours = measure.find_contours(hm, level=threshold)
+
+    return contours
+
+
 def get_plot_coords(channel_number):
     """
     Fonction qui calcule la position en 2D d'un canal sur une Microprobe.
