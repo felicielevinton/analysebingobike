@@ -18,13 +18,15 @@ t_post = 0.50#0.300
 bin_width = 0.005
 # Créer les bins de temps"
 psth_bins = np.arange(-t_pre, t_post, bin_width)
-#gc = np.arange(0, 32)
+gc = np.arange(0, 32)
 
-path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240726_SESSION_01/'
+path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240806_SESSION_00/'
 
 data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)
 features = np.load(path+'headstage_0/features_0.005.npy', allow_pickle=True)
-gc = np.load(path+'headstage_0/good_clusters.npy', allow_pickle=True)
+#gc = np.load(path+'headstage_0/good_clusters.npy', allow_pickle=True)
+
+n_block = int(np.max([elt['Block'] for elt in features]))
 
 from matplotlib.colors import LinearSegmentedColormap
 
@@ -57,7 +59,7 @@ plt.close()
 colors = [(0, 0, 0), (0.8, 0.8, 0.8)]  # noir -> gris clair
 cmap = LinearSegmentedColormap.from_list('gray_scale', colors, N=5)
 
-for i in range(1, 6):
+for i in range(1, n_block+1):
     #tracking = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, i, 'tracking')
     playback = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, i, 'playback')
     #c_tracking = np.nanmean(tracking, axis=1)
@@ -79,23 +81,23 @@ plt.savefig(path+'headstage_0/playback_evolution.png')
 plt.close()
 
 
-block = 1
-tracking = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, block, 'tracking')
-playback = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, block, 'playback')
-fig, axes = plt.subplots(4, 8, figsize=(16, 8))
-fig.suptitle(f'tracking vs playback for block {block}', y=1.02)
-plt.subplots_adjust() 
-num_plots, num_rows, num_columns = get_better_plot_geometry(gc)
-psth_bins = np.arange(-t_pre, t_post, bin_width)
-for cluster in range(num_plots):
-    if cluster < num_plots: 
-        row, col = get_plot_coords(cluster)
-        axes[row, col].plot(psth_bins, np.nanmean(tracking[cluster], axis=0), c = 'red')
-        axes[row, col].plot(psth_bins, np.nanmean(playback[cluster], axis=0), c = 'black')
-        axes[row, col].axvline(0, c = 'grey', linestyle='--')
-        axes[row, col].set_title(f'Cluster {cluster}')
-        axes[row, col].spines['top'].set_visible(False)
-        axes[row, col].spines['right'].set_visible(False)
-plt.title(f'tracking vs playback for block {block}')
-plt.savefig(path+f'headstage_0/psth_cluster_block_{block}.png')
-plt.close()
+for block in range(1, n_block+1):
+    tracking = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, block, 'tracking')
+    playback = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, block, 'playback')
+    fig, axes = plt.subplots(4, 8, figsize=(16, 8))
+    fig.suptitle(f'tracking vs playback for block {block}', y=1.02)
+    plt.subplots_adjust() 
+    num_plots, num_rows, num_columns = get_better_plot_geometry(gc)
+    psth_bins = np.arange(-t_pre, t_post, bin_width)
+    for cluster in range(num_plots):
+        if cluster < num_plots: 
+            row, col = get_plot_coords(cluster)
+            axes[row, col].plot(psth_bins, np.nanmean(tracking[cluster], axis=0), c = 'red')
+            axes[row, col].plot(psth_bins, np.nanmean(playback[cluster], axis=0), c = 'black')
+            axes[row, col].axvline(0, c = 'grey', linestyle='--')
+            axes[row, col].set_title(f'Cluster {cluster}')
+            axes[row, col].spines['top'].set_visible(False)
+            axes[row, col].spines['right'].set_visible(False)
+    plt.title(f'tracking vs playback for block {block}')
+    plt.savefig(path+f'headstage_0/psth_cluster_block_{block}.png')
+    plt.close()
