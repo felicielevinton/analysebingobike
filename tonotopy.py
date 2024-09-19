@@ -240,6 +240,7 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
             axes[row, col].set_title(f'Cluster {gc[cluster]}')
             axes[row, col].axvline(x=t_0, color='black', linestyle='--') # to print a vertical line at the stim onset time
         
+        
 
             #Je ne prends la réponse qu'entre 40 et 60ms
             #max = 0
