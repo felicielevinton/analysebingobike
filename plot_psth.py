@@ -19,7 +19,7 @@ bin_width = 0.005
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 #gc = np.arange(0, 32)
 
-path = '/mnt/working2/felicie/data2/eTheremin/ALTAI/ALTAI_20240725_SESSION_00/'
+path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240806_SESSION_00/'
 
 data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)
 features = np.load(path+'headstage_0/features_0.005.npy', allow_pickle=True)
@@ -50,6 +50,8 @@ for cluster in range(num_plots):
         axes[row, col].plot(psth_bins, np.nanmean(playback[cluster], axis=0), c = 'black')
         axes[row, col].axvline(0, c = 'grey', linestyle='--')
         axes[row, col].set_title(f'Cluster {cluster}')
+        axes[row, col].spines['top'].set_visible(False)
+        axes[row, col].spines['right'].set_visible(False)
 plt.savefig(path+'headstage_0/psth_cluster.png')
 plt.close()
 
