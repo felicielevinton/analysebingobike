@@ -12,15 +12,16 @@ from format_data import *
 from utils import *
 import pickle as pkl
 
-t_pre = 0.2#0.2
+t_pre = 0.5#0.2
 t_post = 0.50#0.300
 bin_width = 0.005
 # Créer les bins de temps"
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 #gc = np.arange(0, 32)
 
-path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240910_SESSION_00/'
-session_type = 'TrackingOnly'# PlaybackOnly TrackingOnly Playback
+path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240912_SESSION_01/'
+
+session_type = 'TrackingOnly'# PlaybackOnly TrackingOnly Playback 'MappingChange'
 
 data = np.load(path+f'headstage_0/data_{bin_width}.npy', allow_pickle=True)
 features = np.load(path+f'headstage_0/features_{bin_width}.npy', allow_pickle=True)
@@ -43,7 +44,7 @@ if session_type=='Playback':
     plt.subplots_adjust() 
     num_plots, num_rows, num_columns = get_better_plot_geometry(gc)
     psth_bins = np.arange(-t_pre, t_post, bin_width)
-    for cluster in range(num_plots):
+    for cluster in gc:
         if cluster < num_plots: 
             row, col = get_plot_coords(cluster)
             axes[row, col].plot(psth_bins, np.nanmean(tracking[cluster], axis=0), c = 'red')
