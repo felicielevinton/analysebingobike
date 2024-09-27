@@ -19,9 +19,9 @@ bin_width = 0.005
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 #gc = np.arange(0, 32)
 
-path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240912_SESSION_01/'
+path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240725_SESSION_00/'
 
-session_type = 'TrackingOnly'# PlaybackOnly TrackingOnly Playback 'MappingChange'
+session_type = 'Playback'# PlaybackOnly TrackingOnly Playback 'MappingChange'
 
 data = np.load(path+f'headstage_0/data_{bin_width}.npy', allow_pickle=True)
 features = np.load(path+f'headstage_0/features_{bin_width}.npy', allow_pickle=True)
