@@ -270,7 +270,7 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
             #je prends +1 dans le maxf
                 bandwidth.append([unique_tones[int(minf)], unique_tones[int(maxf)]])
                 peaks.append(unique_tones[peak[0]])
-            plotted_heatmap.append(milieu)
+            plotted_heatmap.append(smoothed)
             #cbar_ax = fig.add_axes([ax.get_position().x1 + 0.01, ax.get_position().y0, 0.02, ax.get_position().height])
             #fig.colorbar(img, cax=cbar_ax)
         # Hide any unused subplots
