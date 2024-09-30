@@ -19,7 +19,7 @@ bin_width = 0.005
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 #gc = np.arange(0, 32)
 
-path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240725_SESSION_00/'
+path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240822/ALTAI_20240822_SESSION_00/'
 
 session_type = 'Playback'# PlaybackOnly TrackingOnly Playback 'MappingChange'
 

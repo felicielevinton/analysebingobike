@@ -220,20 +220,20 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
             
             #je mets des zeros aux frequences trop hautes et trop basses où je n'ai pas
             #assez de présentations
-            lowf = np.zeros((min_freq+1, len(smoothed[0])))
-            highf = np.zeros((max_freq+1, len(smoothed[0])))
+            #lowf = np.zeros((min_freq+1, len(smoothed[0])))
+            #highf = np.zeros((max_freq+1, len(smoothed[0])))
             
-            milieu = np.concatenate((lowf, smoothed[min_freq:-max_freq]))
+            #milieu = np.concatenate((lowf, smoothed[min_freq:-max_freq]))
 
             # Concaténation à l'arrière
-            milieu = np.concatenate((milieu, highf))
+            #milieu = np.concatenate((milieu, highf))
 
 
-            vmin = np.min(milieu)  # Valeur minimale dans ta matrice
-            vmax = np.max(milieu)  # Valeur maximale dans ta matrice
+            vmin = np.min(smoothed)  # Valeur minimale dans ta matrice
+            vmax = np.max(smoothed)  # Valeur maximale dans ta matrice
             norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)  # Normalisation centrée sur 0
             #img = axes[row, col].pcolormesh(milieu, cmap=create_centered_colormap(abs_max), vmin=-abs_max, vmax=abs_max)
-            img = axes[row, col].pcolormesh(milieu, cmap='seismic', norm=norm)
+            img = axes[row, col].pcolormesh(smoothed, cmap='seismic', norm=norm)
             #axes[row, col].set_yticks(np.arange(len(unique_tones)), unique_tones)
             axes[row, col].set_xlabel('Time')
             #axes[row, col].set_ylabel('Frequency [Hz]')
