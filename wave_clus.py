@@ -6,12 +6,12 @@ import os
 
 #path = 'Z:/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240710_SESSION_00/' 
 # path = 'Z:/eTheremin/ALTAI/ALTAI_20240722_SESSION_01/'
-path = 'Z:/eTheremin/ALTAI/ALTAI_20240910_SESSION_00/'
-session = 'ALTAI_20240910_SESSION_00'
-save_path = 'Y:/eTheremin/clara/ALTAI_20240910_SESSION_00/filtered/'
+path = 'Z:/eTheremin/ALTAI/ALTAI_20240710_SESSION_00/'
+session = 'ALTAI_20240710_SESSION_00'
+save_path = 'Y:/eTheremin/clara/ALTAI_20240710_SESSION_00/' +'std.min = 4 bis/'
 #path = 'Z:/eTheremin/ALTAI/ALTAI_20240914_SESSION_00/'
 data_t = np.load(path + 'headstage_0/filtered_neural_data.npy', allow_pickle = True)
-data = data_t.transpose()
+data = data_t.transpose() # pour les données filrées
 print(data.shape)
 
 
@@ -21,9 +21,9 @@ print(data.shape)
 # except OSError as e:
 #     print(f"Erreur lors de la création du dossier : {e}")
 
-num_channel = [3,6]
-
-#num_channel = np.load(path + 'headstage_0/good_clusters.npy', allow_pickle = True)
+#num_channel = [13,0,4,15,10,19,9,22,12,7,11]
+#num_channel = [3,6,17,5,23,16,14,31]
+num_channel = np.load(path + 'headstage_0/good_clusters.npy', allow_pickle = True)
 print(num_channel)
 for k in num_channel:
     print(k)

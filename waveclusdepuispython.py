@@ -3,15 +3,17 @@ import os
 import time
 import numpy as np
 
-good_channels = [3,6,17,5,23,16,14,31]
-#good_channels = np.load('Z:/eTheremin/ALTAI/ALTAI_20240910_SESSION_00/' + 'headstage_0/good_clusters.npy', allow_pickle = True)
-path = 'Y:/eTheremin/clara/ALTAI_20240910_SESSION_00/filtered/'
+#good_channels = [3,24]
+good_channels = np.load('Z:/eTheremin/ALTAI/ALTAI_20240710_SESSION_00/' + 'headstage_0/good_clusters.npy', allow_pickle = True)
+path = 'Y:/eTheremin/clara/ALTAI_20240710_SESSION_00/'+ 'std.min = 4 bis/'
 # fichiers_a_supprimer = [
 #     path + 'data_C1.dg_01',
 #     path + 'data_C1.dg_01.lab',
 # ]
 
-# Intervalle de vérification (en secondes)
+print(good_channels)
+
+# Intervalle de vérification (en secondes)+-
 interval_verification = 0.5
 timeout_creation = 300  # Temps maximum en secondes pour attendre la création des fichiers "times_C"
 
@@ -89,14 +91,15 @@ for channel in good_channels:
 
 
 
-# good_channels_str = "[" + " ".join(map(str, good_channels)) + "]"
-# matlab_command = f"matlab -nodesktop -nosplash -r \"addpath('{script_path}');\"cd('{path}'); process_channels({good_channels_str}, '{path}'); exit;\""
 
-# # Exécuter la commande MATLAB une seule fois
-# try:
-#     print("Exécution du script MATLAB pour traiter tous les canaux...")
-#     with open('log_matlab_process.txt', 'w') as log_file:
-#         subprocess.run(matlab_command, shell=True, check=True, stdout=log_file, stderr=log_file)
-#     print("Traitement terminé avec succès.")
-# except subprocess.CalledProcessError as e:
-#     print(f"Erreur lors de l'exécution du script MATLAB : {e}")
+# # good_channels_str = "[" + " ".join(map(str, good_channels)) + "]"
+# # matlab_command = f"matlab -nodesktop -nosplash -r \"addpath('{script_path}');\"cd('{path}'); process_channels({good_channels_str}, '{path}'); exit;\""
+
+# # # Exécuter la commande MATLAB une seule fois
+# # try:
+# #     print("Exécution du script MATLAB pour traiter tous les canaux...")
+# #     with open('log_matlab_process.txt', 'w') as log_file:
+# #         subprocess.run(matlab_command, shell=True, check=True, stdout=log_file, stderr=log_file)
+# #     print("Traitement terminé avec succès.")
+# # except subprocess.CalledProcessError as e:
+# #     print(f"Erreur lors de l'exécution du script MATLAB : {e}")
