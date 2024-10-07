@@ -18,7 +18,7 @@ bin_width = 0.005
 # Créer les bins de temps"
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 
-path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240822/ALTAI_20240822_SESSION_00/'
+path = '/auto/data2/eTheremin/FRINAULT/FRINAULT_20230218/FRINAULT_20230218_SESSION_00/'
 bb = True
 
 data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)
