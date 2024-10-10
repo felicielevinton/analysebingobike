@@ -18,7 +18,7 @@ bin_width = 0.005
 # Créer les bins de temps"
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 
-path = '/auto/data2/eTheremin/MUROLS/MUROLS_20230219/MUROLS_20230219_SESSION_00/'
+path = '/auto/data2/eTheremin/MUROLS/MUROLS_20230223/MUROLS_20230223_SESSION_00/'
 bb = True
 
 data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)
@@ -290,3 +290,46 @@ for ax in axes[n_block:]:
 plt.savefig(path+'headstage_0/playback_didvided.png', bbox_inches='tight')
 plt.close()
 print("playback saved")
+
+#figure de shihab
+
+
+tail = True
+n_block = int(np.max([elt['Block'] for elt in features]))
+print(n_block+1)
+m_tracking, m_playback = [], []
+if tail:
+    warmup = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, 0, 'tail')
+    warmdown = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, n_block, 'tail')
+
+    c_warmup = np.nanmean(warmup, axis=1)
+    m_warmup = np.nanmean(c_warmup, axis=0)
+
+    c_warmdown= np.nanmean(warmdown, axis=1)
+    m_warmdown = np.nanmean(c_warmdown, axis=0)
+for i in range(1, n_block):
+    tracking = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, i, 'tracking')
+    playback = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, i, 'playback')
+    #playback = get_psth_in_block(data, features, t_pre, t_post, bin_width, gc, i, 'playback')
+    c_tracking = np.nanmean(tracking, axis=1)
+    c_playback = np.nanmean(playback, axis=1)
+    m_tracking.append(np.nanmean(c_tracking, axis=0))
+    m_playback.append(np.nanmean(c_playback, axis=0))
+x_tr = np.arange(0, 0 + (n_block+1) , 1)
+x_pb = np.arange(0.5, 0.5 + n_block , 1)
+tail=True
+if tail : 
+    plt.plot(psth_bins+np.full_like(psth_bins,-1), m_warmup, c = 'red')
+    plt.plot(psth_bins+np.full_like(psth_bins,x_tr[-1]), m_warmdown, c = 'red')
+
+for i, elt in enumerate(m_tracking) : 
+    plt.plot(psth_bins+np.full_like(psth_bins,x_tr[i]), elt, c = 'red')
+    plt.plot(psth_bins+np.full_like(psth_bins,x_pb[i]), m_playback[i], c = 'black')
+plt.xlabel('block [s]')
+plt.ylabel('[spikes/s]')
+plt.gca().spines['top'].set_visible(False)
+plt.gca().spines['right'].set_visible(False)
+plt.legend()
+plt.title('Evolution of psth block by block')
+plt.savefig(path+'headstage_0/plot_shihab.png', bbox_inches='tight')
+plt.close()
