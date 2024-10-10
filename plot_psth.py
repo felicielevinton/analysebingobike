@@ -19,7 +19,7 @@ bin_width = 0.005
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 #gc = np.arange(0, 32)
 
-path = '/auto/data2/eTheremin/MUROLS/MUROLS_20230220/MUROLS_20230220_SESSION_00/'
+path = '/auto/data2/eTheremin/MUROLS/MUROLS_20230224/MUROLS_20230224_SESSION_00/'
 
 session_type = 'Playback'# PlaybackOnly TrackingOnly Playback 'MappingChange'
 
@@ -46,13 +46,15 @@ if session_type=='Playback':
     plt.subplots_adjust() 
     num_plots, num_rows, num_columns = get_better_plot_geometry(gc)
     psth_bins = np.arange(-t_pre, t_post, bin_width)
-    total_evoked_response = get_total_evoked_response(np.nanmean(tracking, axis=1), t_pre, t_post, bin_width,None, 0, len(psth_bins))
+    tr_total_evoked_response = get_total_evoked_response(np.nanmean(tracking, axis=1), t_pre, t_post, bin_width,None, 0, len(psth_bins))
+    pb_total_evoked_response = get_total_evoked_response(np.nanmean(playback, axis=1), t_pre, t_post, bin_width,None, 0, len(psth_bins))
     for n, cluster in enumerate(gc):
         if cluster < num_plots: 
             row, col = get_plot_coords(cluster)
             axes[row, col].plot(psth_bins, np.nanmean(tracking[n], axis=0), c = 'red')
             axes[row, col].plot(psth_bins, np.nanmean(playback[n], axis=0), c = 'black')
-            axes[row, col].axhline(total_evoked_response[n], c = 'red', linestyle='--')
+            axes[row, col].axhline(tr_total_evoked_response[n], c = 'red', linestyle='--')
+            axes[row, col].axhline(pb_total_evoked_response[n], c = 'black', linestyle='--')
             axes[row, col].axvline(0, c = 'grey', linestyle='--')
             axes[row, col].set_title(f'Cluster {cluster}')
             axes[row, col].spines['top'].set_visible(False)

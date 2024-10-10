@@ -199,67 +199,70 @@ def load_positions_file(folder):
     :param folder: Dossier de sauvegarde de l'expérience.
     :return: Une liste avec les noms de fichiers dans l'ordre chronologique.
     """
-    # Pipeline : extraire tous les fichiers, les remettre dans l'ordre. Nettoyer, couper.
-    # Extraire les fréquences du Mock.
-    # Comparer la longueur, une fois les changements détectés. OK.
-    pause_pattern = r"positions_Pause_0[0-9]"
-    playback_pattern = r"positions_Playback_playback_0[0-9]"
-    tracking_pattern = r"positions_tracking_0[0-9]"
-    warmup_pattern = r"positions_Playback_warmup_0[0-9]"
+    tail_pattern = "positions_tail_0[0-9]"
+    playback_pattern = "positions_playback_0[0-9]"
+    tracking_pattern = "positions_tracking_0[0-9]"
 
+    # Obtenir tous les fichiers correspondants aux différents types
     glob_files = glob(os.path.join(folder, "positions", "positions_*.bin"))
+    
+    # Créer des listes pour chaque type de fichier
     types_pos_list = [list() for _ in range(4)]
+    
     for file in glob_files:
-        if re.search(pause_pattern, file):
+        if re.search(tail_pattern, file):
             types_pos_list[0].append(file)
-        elif re.search(warmup_pattern, file):
-            types_pos_list[1].append(file)
-        elif re.search(r"positions_tracking_0[0-9]", file) is not None:
+        elif re.search(tracking_pattern, file):
             types_pos_list[2].append(file)
         elif re.search(playback_pattern, file):
             types_pos_list[3].append(file)
+    
+    # Créer une liste de sortie vide avec une taille suffisante
+    max_value = 0  # Pour calculer la taille maximale requise
+    for sublist in types_pos_list[2] + types_pos_list[3]:
+        match = re.search(r'positions_(tracking|playback)_(\d+)', sublist)
+        if match:
+            value = int(match.group(2))
+            max_value = max(max_value, value)
 
-    out = ["" for _ in glob_files]
+    # Déterminer la taille de la liste de sortie
+    out = ["" for _ in range(2 + (max_value + 1) * 2)]  # Taille dynamique en fonction du nombre de fichiers
 
+    # Trier et placer les fichiers tail
     for file_name in types_pos_list[0]:
-        match = re.search(r"positions_Pause_(\d+)", file_name)
+        match = re.search(r'positions_tail_(\d+)', file_name)
         if match:
             value = int(match.group(1))
             if value == 0:
-                out[0] = file_nameidx = 2
+                out[0] = file_name
             else:
                 out[-1] = file_name
 
-    for file_name in types_pos_list[1]:
-        match = re.search(r"positions_Playback_warmup_(\d+)", file_name)
-        if match:
-            value = int(match.group(1))
-            if value == 0:
-                out[1] = file_name
-            else:
-                out[-2] = file_name
+    # Index de départ pour le placement des fichiers tracking et playback
     idx = 2
-    n_iter = len(types_pos_list[2])
 
-    for i in range(n_iter):
-        file_name = types_pos_list[2][i]
-        match = re.search(r"positions_tracking_(\d+)", file_name)
-        if match:
-            value = int(match.group(1))
-            print(f"TR : {value}")
-            out[idx + value * 2] = file_name
+    # Placer les fichiers tracking et playback dans le bon ordre
+    for i in range(len(types_pos_list[2])):
+        # Placer les fichiers tracking
+        if i < len(types_pos_list[2]):
+            file_name = types_pos_list[2][i]
+            match = re.search(r'positions_tracking_(\d+)', file_name)
+            if match:
+                value = int(match.group(1))
+                new_idx = idx + value * 2
+                if new_idx < len(out):  # Vérification de l'index
+                    out[new_idx] = file_name
 
-        file_name = types_pos_list[3][i]
-        match = re.search(r"positions_Playback_playback_(\d+)", file_name)
-        if match:
-            value = int(match.group(1))
-            print(f"PB : {value}")
-
-            out[idx + value * 2 + 1] = file_name
-    # for i in range(len(types_pos_list[2])):
-    #     out[idx] = types_pos_list[2][i]  #  [, f"Tracking_0{i}"]  # Tracking
-    #     out[idx + 1] = types_pos_list[3][i]  # , f"Playback_0{i}"]  # Playback
-    #     idx += 2
+        # Placer les fichiers playback
+        if i < len(types_pos_list[3]):
+            file_name = types_pos_list[3][i]
+            match = re.search(r'positions_playback_(\d+)', file_name)
+            if match:
+                value = int(match.group(1))
+                new_idx = idx + value * 2 + 1
+                if new_idx < len(out):  # Vérification de l'index
+                    out[new_idx] = file_name
+    
     return out
 
 

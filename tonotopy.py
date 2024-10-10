@@ -11,7 +11,7 @@ import math
 from utils import *
 import argparse
 import PostProcessing.tools.heatmap as hm
-import seaborn as sns
+#import seaborn as sns
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib.colors import ListedColormap
 from skimage import measure
@@ -63,8 +63,8 @@ def get_tonotopy(data, features, t_pre, t_post, bin_width, good_clusters, unique
     
     heatmaps = []
 
-    for clus in range(n_clus):  
-        clus_psth = np.array(psth[clus])
+    for c, clus in enumerate(good_clusters):  
+        clus_psth = np.array(psth[c])
         average_psth_list = []
         
         for tone in unique_tones:
@@ -192,12 +192,12 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
     bandwidth = []
     plotted_heatmap = []
     peaks = []
-    for cluster in range(num_plots):
+    for n, cluster in enumerate(gc):
         if cluster < num_plots:
-            row, col = get_plot_coords(cluster)
+            row, col = get_plot_coords(n)
             #print(cluster)
-            heatmap_cluster = np.array(heatmaps[cluster])
-            hm, peak = detect_peak(heatmaps, cluster)
+            heatmap_cluster = np.array(heatmaps[n])
+            hm, peak = detect_peak(heatmaps, n)
             #heatmap_min = np.min(heatmap_cluster)
             #heatmap_max = np.max(abs(heatmap_cluster))
             #abs_max = max(abs(heatmap_min), abs(heatmap_max))
@@ -216,7 +216,7 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
                 heatmap_cluster[i] -= mean_freq[i]
             
             
-            smoothed = smooth_2d(heatmap_cluster, 3)
+            smoothed = smooth_2d(heatmap_cluster, 5)
             
             #je mets des zeros aux frequences trop hautes et trop basses où je n'ai pas
             #assez de présentations
@@ -228,16 +228,16 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
             # Concaténation à l'arrière
             #milieu = np.concatenate((milieu, highf))
 
+            vmin = -2 * np.std(smoothed)
+            vmax = 2 * np.std(smoothed)
 
-            vmin = np.min(smoothed)  # Valeur minimale dans ta matrice
-            vmax = np.max(smoothed)  # Valeur maximale dans ta matrice
-            norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)  # Normalisation centrée sur 0
-            #img = axes[row, col].pcolormesh(milieu, cmap=create_centered_colormap(abs_max), vmin=-abs_max, vmax=abs_max)
+            norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
             img = axes[row, col].pcolormesh(smoothed, cmap='seismic', norm=norm)
+            axes[row, col].set_xlabel('Time')
             #axes[row, col].set_yticks(np.arange(len(unique_tones)), unique_tones)
             axes[row, col].set_xlabel('Time')
             #axes[row, col].set_ylabel('Frequency [Hz]')
-            axes[row, col].set_title(f'Cluster {gc[cluster]}')
+            axes[row, col].set_title(f'Cluster {cluster}')
             axes[row, col].axvline(x=t_0, color='black', linestyle='--') # to print a vertical line at the stim onset time
         
         
@@ -259,7 +259,6 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
                         if maxf<len(unique_tones)-1:
                             maxf+=1
             #axes[row, col].plot(x_c, y_c, linewidth=2, color='green')
-            print(x_c, y_c)
             #print(plotted_freq[int(min)], plotted_freq[int(max)])
             # je mets np.nan dans bandwidth si je ne trouve pas de contour
             if max_length==0 or maxf==0:
