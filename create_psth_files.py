@@ -13,7 +13,7 @@ playback_sessions = ['ALTAI_20240724_SESSION_01', 'ALTAI_20240724_SESSION_02', '
                            'ALTAI_20240809_SESSION_00', 'ALTAI_20240814_SESSION_00', 'ALTAI_20240822_SESSION_00']
 
 for session in playback_sessions:
-    path = '/auto/data2/eTheremin/ALTAI/'+ session + '/'
+    path = '/Volumes/data2/eTheremin/ALTAI/'+ session + '/'
 
     data = np.load(path+f'headstage_0/data_{bin_width}.npy', allow_pickle=True)
     features = np.load(path+f'headstage_0/features_{bin_width}.npy', allow_pickle=True)
