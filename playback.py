@@ -18,7 +18,7 @@ bin_width = 0.005
 # Créer les bins de temps"
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 
-path = '/auto/data2/eTheremin/MUROLS/MUROLS_20230223/MUROLS_20230223_SESSION_00/'
+path = '/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240724_SESSION_00/'
 bb = True
 
 data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)

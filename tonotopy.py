@@ -193,8 +193,8 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
     plotted_heatmap = []
     peaks = []
     for n, cluster in enumerate(gc):
-        if cluster < num_plots:
-            row, col = get_plot_coords(n)
+        if n < num_plots:
+            row, col = get_plot_coords(cluster)
             #print(cluster)
             heatmap_cluster = np.array(heatmaps[n])
             hm, peak = detect_peak(heatmaps, n)
@@ -258,7 +258,7 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
                         test = contour[:, 0]
                         if maxf<len(unique_tones)-1:
                             maxf+=1
-            #axes[row, col].plot(x_c, y_c, linewidth=2, color='green')
+            axes[row, col].plot(x_c, y_c, linewidth=2, color='green')
             #print(plotted_freq[int(min)], plotted_freq[int(max)])
             # je mets np.nan dans bandwidth si je ne trouve pas de contour
             if max_length==0 or maxf==0:

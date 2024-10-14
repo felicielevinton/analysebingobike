@@ -19,9 +19,9 @@ bin_width = 0.005
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 #gc = np.arange(0, 32)
 
-path = '/auto/data2/eTheremin/MUROLS/MUROLS_20230224/MUROLS_20230224_SESSION_00/'
+path = '/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240709_SESSION_01/'
 
-session_type = 'Playback'# PlaybackOnly TrackingOnly Playback 'MappingChange'
+session_type = 'PlaybackOnly'# PlaybackOnly TrackingOnly Playback 'MappingChange'
 
 
 
@@ -49,7 +49,7 @@ if session_type=='Playback':
     tr_total_evoked_response = get_total_evoked_response(np.nanmean(tracking, axis=1), t_pre, t_post, bin_width,None, 0, len(psth_bins))
     pb_total_evoked_response = get_total_evoked_response(np.nanmean(playback, axis=1), t_pre, t_post, bin_width,None, 0, len(psth_bins))
     for n, cluster in enumerate(gc):
-        if cluster < num_plots: 
+        if n < num_plots: 
             row, col = get_plot_coords(cluster)
             axes[row, col].plot(psth_bins, np.nanmean(tracking[n], axis=0), c = 'red')
             axes[row, col].plot(psth_bins, np.nanmean(playback[n], axis=0), c = 'black')
