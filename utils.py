@@ -499,6 +499,7 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
         out_psth.append(np.nanmean(out_clus, axis=0))
        
     return in_psth, out_psth    
+ 
     
 
 def get_session_type_final(path):

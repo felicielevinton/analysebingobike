@@ -16,7 +16,7 @@ bin_width = 0.005
 # Créer les bins de temps"
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 
-path = '/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240710_SESSION_01/'
+path = '/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240718_SESSION_00/'
 
 data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)
 features = np.load(path+'headstage_0/features_0.005.npy', allow_pickle=True)
@@ -34,16 +34,16 @@ fig.suptitle('Evolution of tracking', y=1.02)
 plt.subplots_adjust() 
 num_plots, num_rows, num_columns = get_better_plot_geometry(gc)
 psth_bins = np.arange(-t_pre, t_post, bin_width)
-for cluster in gc:
-    if cluster < num_plots: 
+for n, cluster in enumerate(gc):
+    if n < num_plots: 
         row, col = get_plot_coords(cluster)
-        axes[row, col].plot(psth_bins, np.nanmean(first_tr[cluster], axis=0), c = 'orange')
-        axes[row, col].plot(psth_bins, np.nanmean(second_tr[cluster], axis=0), c = 'red')
+        axes[row, col].plot(psth_bins, np.nanmean(first_tr[n], axis=0), c = 'orange')
+        axes[row, col].plot(psth_bins, np.nanmean(second_tr[n], axis=0), c = 'red')
         axes[row, col].axvline(0, c = 'grey', linestyle='--')
         axes[row, col].set_title(f'Cluster {cluster}')
         axes[row, col].spines['top'].set_visible(False)
         axes[row, col].spines['right'].set_visible(False)
-plt.legend()
+#plt.legend()
 plt.savefig(path+'headstage_0/tracking_evolution_psth_cluster.png')
 plt.close()
 

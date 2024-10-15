@@ -203,9 +203,9 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
             if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
                 if features[bin]['Frequency_changes']>0 and  features[bin]['Condition']==c:
                     if low_f<=features[bin]['Played_frequency']<=high_f:
-                        psth_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                        psth_clus.append(data[idx][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
                     else:
-                        out_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                        out_clus.append(data[idx][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
         if len(psth_clus)==0:
             psth_clus = [[np.nan]*(len(psth_bins)-1)]*2
         if len(out_clus)==0:
