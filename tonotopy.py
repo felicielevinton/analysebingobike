@@ -248,7 +248,7 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
             max_length =  0    
             x_c, y_c, minf, maxf = np.nan, np.nan, 0,0 # au cas où on trouve pas de contour
             for contour in contours:
-                if ((contour[:, 1] > t_0-5).all() and (contour[:, 1] < t_0+10).all()):
+                if ((contour[:, 1] > t_0-5).all() and (contour[:, 1] < t_0+50).all()):
                     if len(contour[:, 0])>max_length:
                         max_length = len(contour[:, 0])
                         x_c = contour[:, 1]

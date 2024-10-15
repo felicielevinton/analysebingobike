@@ -4,7 +4,7 @@ import findpeaks
 from skimage import measure
 import os
 
-path = "/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240709_SESSION_01/"
+path = "/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240710_SESSION_01/"
 
 
 t_pre = 0.5#0.2
