@@ -206,9 +206,11 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
                         psth_clus.append(data[idx][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
                     else:
                         out_clus.append(data[idx][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
-        if len(psth_clus)==0:
+        print(len(psth_clus))
+        print(len(out_clus))
+        if len(psth_clus)<100:
             psth_clus = [[np.nan]*(len(psth_bins)-1)]*2
-        if len(out_clus)==0:
+        if len(out_clus)<100:
             out_clus = [[np.nan]*(len(psth_bins)-1)]*2
         in_psth.append(np.nanmean(psth_clus, axis=0))
         out_psth.append(np.nanmean(out_clus, axis=0))
