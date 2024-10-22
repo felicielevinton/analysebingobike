@@ -135,8 +135,12 @@ def get_played_frequency(features, t_pre, t_post, bin_width, condition):
     """
     if condition=="tracking":
         c = 0
-    else : 
+    elif condition=="playback":
         c=1
+    elif condition=="tail":
+        c = -1
+    elif condition == "mappingchange":
+        c = 2
     frequency = []
     for bin in range(len(features)):
         if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
@@ -197,7 +201,7 @@ def get_sustained_activity_nan(psth, t_pre, t_post, bin_width):
 
 def mean_maxima(arr, thresh, t0, t1):
     """
-    Renvoie la moyenne des deux points max d'un tableau cont les indices sont compris
+    Renvoie la moyenne des deux points max d'un tableau dont les indices sont compris
     entre t0 et t1
     """
     # Find peaks in the array
@@ -207,9 +211,9 @@ def mean_maxima(arr, thresh, t0, t1):
     if len(pics) >= 2:
         # Get the indices of the two maximum values
         max_indices = np.argsort(arr[pics])[-2:]
-
         # Calculate the mean of the two maximum values
-        mean = np.mean(arr[pics][max_indices])
+        #mean = np.mean(arr[pics][max_indices])
+        mean = np.max(arr[pics][max_indices])
 
         # Get the actual maximum values
         max_values = arr[pics][max_indices]
@@ -237,8 +241,8 @@ def mean_maxima_nan(arr, thresh, t0, t1):
             max_indices = np.argsort(arr[pics])[-2:]
 
             # Calculate the mean of the two maximum values
-            mean = np.mean(arr[pics][max_indices])
-
+            #mean = np.mean(arr[pics][max_indices])
+            mean = np.max(arr[pics][max_indices])
             # Get the actual maximum values
             max_values = arr[pics][max_indices]
         else:
@@ -253,7 +257,7 @@ def mean_maxima_nan(arr, thresh, t0, t1):
     return mean, pics, max_values
 
 
-def get_total_evoked_response(psth, t_pre, t_post, bin_width, thresh):
+def get_total_evoked_response(psth, t_pre, t_post, bin_width, thresh, t0, t1):
     """"
     Function qui renvoie la total evoked reponse pour un tableau contenant des psth
     input : un tableau psth contenant des psth
@@ -262,7 +266,8 @@ def get_total_evoked_response(psth, t_pre, t_post, bin_width, thresh):
     """
     total_evoked_response = []
     for elt in psth:
-        total_evoked_response.append(mean_maxima(elt, thresh)[0])
+        total_evoked_response.append(mean_maxima(elt, thresh, t0,t1)[0])
+        #total_evoked_response.append(np.max(elt))
     return total_evoked_response
 
 
@@ -449,39 +454,6 @@ def indices_valeurs_comprises(tableau, valeur_min, valeur_max):
             indices.append(i)
     return indices
 
-
-
-def moyenne_psth_par_frequence(psth, mock_freq, unique_tones, min_presentations):
-    
-     # a verifier avant d'utiliser
-    """"
-    Fonction qui, pour toutes les fréquences de la bandwidth d'un neurone, fait la moyenne par mock frequency.
-       Args:
-        psth: un tableau qui contient des psth (get_psth)
-        mock_freq : tableau qui contient les mock frequencies associées aux psth
-        unique_tones : tableau contenantles tons joués
-        min_presentations (nombre): nombre minimun de présentations d'une fréquence pour qu'on la retienne
-        
-        
-        Returns:
-            psth_per_frequency : les psth moyens par mock_frequency
-            n_presnetation : le nombre de présentations des f à une mock frequency donnée
-    """
-    # Créer une liste pour regrouper les valeurs de psth par fréquence
-    psth_per_frequency, n_presentations=[], []
-    for f in unique_tones:#je prends une position cible
-        tab=[]
-        for i in range(len(mock_freq)): # je regarde sur chaque position si je suis a la position cible
-            if mock_freq[i]==f: # si je suis à cette position alors j'ajoute
-                tab.append(psth[i])
-        n = len(tab)
-        if n >min_presentations: #au moins 10 occurrences de la condition
-            psth_per_frequency.append(np.nanmean(tab, axis=0))
-            n_presentations.append(n)
-        else : 
-            psth_per_frequency.append(np.nan)
-            n_presentations.append(n)
-    return psth_per_frequency, n_presentations
 
 
 
