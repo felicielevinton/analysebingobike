@@ -10,15 +10,17 @@ import numpy as np
 #sessions = ['ALTAI_20240711_SESSION_01','ALTAI_20240712_SESSION_01','ALTAI_20240722_SESSION_01','ALTAI_20240722_SESSION_04','ALTAI_20240724_SESSION_01',
  #           'ALTAI_20240724_SESSION_02']
 
-sessions = ['ALTAI_20240710_SESSION_00']
+#sessions = ['ALTAI_20240710_SESSION_00']
+sessions = ['ALTAI_20240822_SESSION_00']
 for session in sessions:
     print(session)
     path = 'Y:/eTheremin/clara/' + session + '/' #+ 'filtered/std.min =5 bis/' 
-    if os.path.exists('Z:/eTheremin/ALTAI/' + session + '/' + 'headstage_0/good_clusters.npy'):
-        good_channels = np.load('Z:/eTheremin/ALTAI/' + session + '/' + 'headstage_0/good_clusters.npy', allow_pickle = True)
-    else : 
-        good_channels = np.arange(32)
-    
+    # if os.path.exists('Z:/eTheremin/ALTAI/' + session + '/' + 'headstage_0/good_clusters.npy'):
+    #     good_channels = np.load('Z:/eTheremin/ALTAI/' + session + '/' + 'headstage_0/good_clusters.npy', allow_pickle = True)
+    # else : 
+    #     good_channels = np.arange(32)
+    #good_channels = ['5','6','7','8','9','10','12','13','14','15','16','17','18','19','20','21','23','24','25','26','27','28','29','30','31']
+    good_channels = ['18']
     
 
     print(good_channels)
