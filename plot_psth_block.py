@@ -90,11 +90,11 @@ for block in range(1, n_block+1):
     plt.subplots_adjust() 
     num_plots, num_rows, num_columns = get_better_plot_geometry(gc)
     psth_bins = np.arange(-t_pre, t_post, bin_width)
-    for cluster in range(num_plots):
+    for n, cluster in enumerate(num_plots):
         if cluster < num_plots: 
             row, col = get_plot_coords(cluster)
-            axes[row, col].plot(psth_bins, np.nanmean(tracking[cluster], axis=0), c = 'red')
-            axes[row, col].plot(psth_bins, np.nanmean(playback[cluster], axis=0), c = 'black')
+            axes[row, col].plot(psth_bins, np.nanmean(tracking[n], axis=0), c = 'red')
+            axes[row, col].plot(psth_bins, np.nanmean(playback[n], axis=0), c = 'black')
             axes[row, col].axvline(0, c = 'grey', linestyle='--')
             axes[row, col].set_title(f'Cluster {cluster}')
             axes[row, col].spines['top'].set_visible(False)

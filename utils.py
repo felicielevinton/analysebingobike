@@ -488,17 +488,20 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
             if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
                 if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==c:
                     if low_f<=features[bin]['Played_frequency']<=high_f:
-                        psth_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                        psth_clus.append(data[idx][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
                     else:
-                        out_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
-        if len(psth_clus)==0:
+                        out_clus.append(data[idx][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+        print(len(psth_clus))
+        print(len(out_clus))
+        if len(psth_clus)<1500:
             psth_clus = [[np.nan]*(len(psth_bins)-1)]*2
-        if len(out_clus)==0:
+        if len(out_clus)<1500:
             out_clus = [[np.nan]*(len(psth_bins)-1)]*2
         in_psth.append(np.nanmean(psth_clus, axis=0))
         out_psth.append(np.nanmean(out_clus, axis=0))
        
     return in_psth, out_psth    
+ 
     
 
 def get_session_type_final(path):

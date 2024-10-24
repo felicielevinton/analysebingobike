@@ -19,9 +19,9 @@ bin_width = 0.005
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 #gc = np.arange(0, 32)
 
-path = '/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240709_SESSION_01/'
+path = '/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240723_SESSION_01/'
 
-session_type = 'PlaybackOnly'# PlaybackOnly TrackingOnly Playback 'MappingChange'
+session_type = 'Playback'# PlaybackOnly TrackingOnly Playback 'MappingChange'
 
 
 
