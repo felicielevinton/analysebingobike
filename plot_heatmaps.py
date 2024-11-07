@@ -4,6 +4,7 @@ import findpeaks
 from skimage import measure
 import os
 
+<<<<<<< HEAD
 path = "/Volumes/data2/eTheremin/ALTAI/ALTAI_20240809_SESSION_00/"
 
 #session = 'MMELOIK_20241029_SESSION_00'
@@ -11,14 +12,19 @@ path = "/Volumes/data2/eTheremin/ALTAI/ALTAI_20240809_SESSION_00/"
 
 #session = 'MUROLS_20230227/MUROLS_20230227_SESSION_00'
 #path = '/Volumes/data2/eTheremin/MUROLS/'+ session + '/'
+=======
+#path = "/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240709_SESSION_01/"
+>>>>>>> e15e68c1 (autre)
 
+session = '/MUROLS_20230220/MUROLS_20230220_SESSION_00'
+path = '/auto/data2/eTheremin/MUROLS/'+ session + '/'
 
 t_pre = 0.5#0.2
 t_post = 0.50#0.300
 bin_width = 0.005
 # Créer les bins de temps"
 psth_bins = np.arange(-t_pre, t_post, bin_width)
-condition = 'tracking' #or playback
+condition = 'playback' #or playback
 
 data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)
 features = np.load(path+'headstage_0/features_0.005.npy', allow_pickle=True)
