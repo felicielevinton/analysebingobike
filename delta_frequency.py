@@ -90,18 +90,54 @@ def get_delta_f(data, features, t_pre, t_post, bin_width, good_clusters):
       - une liste contenant les écarts entre les fréquences jouées et mock en playback [chgt de freq]
     """
     psth=[] 
-    for cluster in good_clusters:
+    for n, cluster in enumerate(good_clusters):
         psth_clus = []
         delta_f = []
         for bin in range(len(features)):
             #print(diff)
             if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==1 :
-                psth_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                psth_clus.append(data[n][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
                 #diff = abs(math.log2(features[bin]['Played_frequency']/features[bin]['Mock_frequency'])) #si on veut une valeur absolue dans la distribution des deltaf
                 diff = math.log2(features[bin]['Played_frequency']/features[bin]['Mock_frequency'])
                 delta_f.append(diff)
         psth.append(psth_clus)
     return psth, delta_f
+
+
+
+def get_delta_f_in_bd(data, features, bandwidth, t_pre, t_post, bin_width, good_clusters):
+    """
+    Pour voir, pour chaque neurone, la différence de psth en fonction de la différence entre la 
+    Played_frequency et la mock_frequency uniquement dans la bandwidth du neurone
+    
+    input: 
+      -data, features, good_clusters, bandwidth (le tableau avec les fréquences préférées de chaque neurone)
+    output : 
+     - une liste contenant le psth moyen par cluster pour chaque changement de fréquence en playback [neurones x chgt de freq x [t_pre, t_post] ]
+      - une liste contenant les écarts entre les fréquences jouées et mock en playback [chgt de freq]
+    """
+    psth=[] 
+    for n, cluster in enumerate(good_clusters):
+        bd = bandwidth[n]
+        psth_clus = []
+        delta_f = []
+        played_mock = []
+        for bin in range(len(features)):
+            #print(diff)
+            if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
+                if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==1 and bd[0]<=features[bin]['Played_frequency']<=bd[1] :
+                    psth_clus.append(data[n][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                    #diff = abs(math.log2(features[bin]['Played_frequency']/features[bin]['Mock_frequency'])) #si on veut une valeur absolue dans la distribution des deltaf
+                    try :
+                        diff = math.log2(features[bin]['Played_frequency']/features[bin]['Mock_frequency'])
+                    except : 
+                        diff.append(np.nan)
+                    delta_f.append(diff)
+                    played_mock.append([features[bin]['Played_frequency'], features[bin]['Mock_frequency']])
+
+            psth.append(psth_clus)
+    return psth, delta_f, played_mock
+
 
 
 def plot_distribution(deltaf, n_bins):

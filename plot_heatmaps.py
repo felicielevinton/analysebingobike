@@ -4,10 +4,13 @@ import findpeaks
 from skimage import measure
 import os
 
-path = "/Volumes/data2/eTheremin/ALTAI/ALTAI_20240806_SESSION_00/"
+#path = "/Volumes/data2/eTheremin/ALTAI/ALTAI_20240806_SESSION_00/"
 
 #session = 'MMELOIK_20241029_SESSION_00'
 #path = '/Volumes/data6/eTheremin/MMELOIK/'+ session + '/'
+
+session = 'MUROLS_20230220/MUROLS_20230220_SESSION_00'
+path = '/Volumes/data2/eTheremin/MUROLS/'+ session + '/'
 
 
 t_pre = 0.5#0.2
@@ -19,8 +22,8 @@ condition = 'tracking' #or playback
 
 data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)
 features = np.load(path+'headstage_0/features_0.005.npy', allow_pickle=True)
-#gc = np.load(path+'headstage_0/good_clusters.npy', allow_pickle=True)
-gc = np.arange(32)
+gc = np.load(path+'headstage_0/good_clusters.npy', allow_pickle=True)
+#gc = np.arange(32)
 
 tones = get_played_frequency(features, t_pre, t_post, bin_width, condition)
 # prendre les valeurs uniques de tones
