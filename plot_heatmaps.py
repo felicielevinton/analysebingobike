@@ -9,7 +9,7 @@ import os
 #session = 'MMELOIK_20241029_SESSION_00'
 #path = '/Volumes/data6/eTheremin/MMELOIK/'+ session + '/'
 
-session = 'MUROLS_20230220/MUROLS_20230220_SESSION_00'
+session = 'MUROLS_20230227/MUROLS_20230227_SESSION_00'
 path = '/Volumes/data2/eTheremin/MUROLS/'+ session + '/'
 
 
