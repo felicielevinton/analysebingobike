@@ -26,8 +26,10 @@ gc = np.load(path+'headstage_0/good_clusters.npy', allow_pickle=True)
 #gc = np.arange(32)
 
 tones = get_played_frequency(features, t_pre, t_post, bin_width, condition)
+tones = [int(x) for x in tones]
 # prendre les valeurs uniques de tones
 unique_tones = sorted(np.unique(tones))
+unique_tones = [int(x) for x in unique_tones]
 
 # ne calculer les heatmaps uniquement si on ne trouve pas le fichier heatmaps.npy
 if not os.path.exists(path + 'heatmap_plot_playback.npy'):

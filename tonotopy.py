@@ -59,7 +59,9 @@ def get_tonotopy(data, features, t_pre, t_post, bin_width, good_clusters, unique
      
 
     tones = np.array(tones)
+    tones = [int(x) for x in tones]
     unique_tones_test = np.unique(tones)
+    unique_tones = [int(x) for x in unique_tones]
     
     heatmaps = []
 
