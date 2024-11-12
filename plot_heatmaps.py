@@ -6,6 +6,7 @@ import os
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 path = "/Volumes/data2/eTheremin/ALTAI/ALTAI_20240809_SESSION_00/"
 
 #session = 'MMELOIK_20241029_SESSION_00'
@@ -26,6 +27,13 @@ path = '/auto/data2/eTheremin/MUROLS/'+ session + '/'
 
 path = '/auto/data2/eTheremin/MUROLS/MUROLS_20230221/MUROLS_20230221_SESSION_00'
 >>>>>>> 5fb8e761 (nouvelle méthode pour in/out qui marche bien)
+=======
+#path = "/auto/data6/eTheremin/OSCYPEK/OSCYPEK/OSCYPEK_20240709_SESSION_01/"
+#session = '/MMELOIK_20241107_SESSION_00'
+# path = '/auto/data6/eTheremin/MMELOIK/'+ session + '/'
+
+path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240806_SESSION_00/'
+>>>>>>> 283d6daf (pôsitions)
 
 t_pre = 0.5#0.2
 t_post = 0.50#0.300

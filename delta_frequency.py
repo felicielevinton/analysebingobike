@@ -103,6 +103,32 @@ def get_delta_f(data, features, t_pre, t_post, bin_width, good_clusters):
         psth.append(psth_clus)
     return psth, delta_f
 
+def get_delta_f_in_block(data, features, t_pre, t_post, bin_width, good_clusters, block):
+    """
+    Pour voir, pour chaque neurone, la différence de psth en fonction de la différence entre la 
+    Played_frequency et la mock_frequency
+    
+    input: 
+      -data, features, good_clusters
+    output : 
+     - une liste contenant le psth moyen par cluster pour chaque changement de fréquence en playback [neurones x chgt de freq x [t_pre, t_post] ]
+      - une liste contenant les écarts entre les fréquences jouées et mock en playback [chgt de freq]
+    """
+    psth=[] 
+    for n, cluster in enumerate(good_clusters):
+        psth_clus = []
+        delta_f = []
+        for bin in range(len(features)):
+            #print(diff)
+            if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==1 and features[bin]['Block']==block :
+                psth_clus.append(data[n][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                #diff = abs(math.log2(features[bin]['Played_frequency']/features[bin]['Mock_frequency'])) #si on veut une valeur absolue dans la distribution des deltaf
+                diff = math.log2(features[bin]['Played_frequency']/features[bin]['Mock_frequency'])
+                delta_f.append(diff)
+        psth.append(psth_clus)
+    return psth, delta_f
+
+
 
 
 def get_delta_f_in_bd(data, features, bandwidth, t_pre, t_post, bin_width, good_clusters):

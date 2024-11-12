@@ -50,8 +50,8 @@ def get_tonotopy(data, features, t_pre, t_post, bin_width, good_clusters, unique
     #je prends les psth de chaque neurones et la fréquence associée à chaque psth
     psth = get_psth(data, features, t_pre, t_post, bin_width, good_clusters, condition)
     tones = get_played_frequency(features, t_pre, t_post, bin_width, condition)
-
-    
+    tones = [int(x) for x in tones]
+    unique_tones = [int(x) for x in unique_tones]
     
     psth_bins = np.arange(-t_pre, t_post + bin_width, bin_width)
     

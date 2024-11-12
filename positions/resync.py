@@ -86,9 +86,53 @@ class Mapping(object):
         for i, _p in enumerate(motion):
             t[i] = self._lut_tones[_p]
         return t
+    
 
 
 def clean_positions(positions):
+    """
+    Fonction de nettoyage des positions enregistrées au cours de l'expérience. Pour rappel,
+    une valeur de -1 indique que le sujet n'a pas été détecté par le réseau de neurones.
+    Cette version remplace toutes les occurrences de -1, même celles qui sont à la fin ou dans une séquence continue.
+    
+    :param positions: Tableau des positions avec potentiellement des valeurs -1
+    :return: Tableau des positions avec toutes les valeurs -1 remplacées
+    """
+    
+    # Identifier les indices où positions == -1
+    y = np.where(positions == -1)[0]
+    
+    if len(y) == 0:
+        # Aucun -1 à remplacer
+        return positions
+    
+    # Parcourir toutes les séquences de -1 et les remplacer
+    k = 0
+    begin = None
+    for i in range(len(y)):
+        if i == 0 or y[i] == y[i - 1] + 1:
+            # Début ou continuité d'une séquence de -1
+            if k == 0:
+                begin = y[i]  # Enregistrer le début de la séquence
+            k += 1
+        else:
+            # Fin d'une séquence de -1
+            end = y[i - 1]
+            filler_value = positions[begin - 1] if begin > 0 else positions[end + 1]
+            positions[begin:end + 1] = filler_value
+            k = 1
+            begin = y[i]
+    
+    # Traiter la dernière séquence de -1, s'il y en a
+    if k > 0:
+        end = y[-1]
+        filler_value = positions[begin - 1] if begin > 0 else positions[end + 1]
+        positions[begin:end + 1] = filler_value
+
+    return positions
+
+
+def clean_positions_old(positions):
     """
     Fonction importante.
     Fonction de nettoyage des positions enregistrées au cours de l'expérience. Pour rappel,
