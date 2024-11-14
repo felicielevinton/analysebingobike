@@ -1,14 +1,23 @@
 import numpy as np
+<<<<<<< HEAD
 fs = 30000
 
 def create_tt_v1(tt):
+=======
+
+
+def create_tt_v(tt):
+>>>>>>> b1bfb22d (new tt)
 
     tt_tones = np.array(tt['tones'], dtype=int)
     tt_triggers = np.array(tt['triggers'], dtype=int)
     tt_condition = np.array(tt['condition'], dtype=int)
     block = tt['block']
     tt_block = [int(block.split('_0')[1]) for block in tt['block']]
+<<<<<<< HEAD
     tt_triggers = tt_triggers/fs
+=======
+>>>>>>> b1bfb22d (new tt)
 
     bin_width = 0.005
     min_value = int(tt_triggers.min())  # Get the minimum value of 'spike_time'
@@ -23,7 +32,11 @@ def create_tt_v1(tt):
     interpolated_block_stim = np.zeros(len(bins) - 1)
 
 
+<<<<<<< HEAD
     for i in range(1,len(bins) - 1):
+=======
+    for i in range(len(bins) - 1):
+>>>>>>> b1bfb22d (new tt)
         bin_start = bins[i]
         bin_end = bins[i + 1]
 
@@ -41,9 +54,15 @@ def create_tt_v1(tt):
                 
         else:
                 # If no stimulus in the bin, set bin_frequencies to the previous frequency
+<<<<<<< HEAD
             interpolated_freq[i] = interpolated_freq[i-1]
             interpolated_type_stim[i] = interpolated_type_stim[i-1]
             interpolated_block_stim[i] = interpolated_block_stim[i-1]
+=======
+            interpolated_freq[i] = np.nan
+            interpolated_type_stim[i] = np.nan
+            interpolated_block_stim[i] = np.nan
+>>>>>>> b1bfb22d (new tt)
 
     features = {}
     for i, bin in enumerate(bins[:-1]):
@@ -53,6 +72,7 @@ def create_tt_v1(tt):
                 'Block' : interpolated_block_stim[i],
                 'Frequency_changes': stimulus_presence[i]
             }  
+<<<<<<< HEAD
     return features
 
 
@@ -123,3 +143,6 @@ with open(file_path, 'rb') as file:
 features = create_tt_v(tt)
 with open(folder + 'headstage_0/features.pkl', 'wb') as file:
     pickle.dump(features, file)
+=======
+    return features
+>>>>>>> b1bfb22d (new tt)
