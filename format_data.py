@@ -191,26 +191,25 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
     if condition=="tracking":
         c = 0
     else : 
-        c=1
-        
+        c=1   
     
     in_psth, out_psth=[] , []
     for idx, cluster in enumerate(good_clusters):
         psth_clus, out_clus = [], []
-        low_f, high_f = bandwidth[idx][0],  bandwidth[idx][1]
+        low_f, high_f = int(bandwidth[idx][0]),  int(bandwidth[idx][1])
         for bin in range(len(features)):
             #print(diff)
             if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
                 if features[bin]['Frequency_changes']>0 and  features[bin]['Condition']==c:
-                    if low_f<=features[bin]['Played_frequency']<=high_f:
+                    if low_f<=int(features[bin]['Played_frequency'])<=high_f:
                         psth_clus.append(data[idx][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
                     else:
                         out_clus.append(data[idx][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
         print(len(psth_clus))
         print(len(out_clus))
-        if len(psth_clus)<100:
+        if len(psth_clus)<10:
             psth_clus = [[np.nan]*(len(psth_bins)-1)]*2
-        if len(out_clus)<100:
+        if len(out_clus)<10:
             out_clus = [[np.nan]*(len(psth_bins)-1)]*2
         in_psth.append(np.nanmean(psth_clus, axis=0))
         out_psth.append(np.nanmean(out_clus, axis=0))

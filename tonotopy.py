@@ -230,9 +230,9 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
             # Concaténation à l'arrière
             #milieu = np.concatenate((milieu, highf))
 
-            vmin = -2 * np.std(smoothed)
-            vmax = 2 * np.std(smoothed)
-
+            vmin = -3 * np.std(smoothed)
+            vmax = 3 * np.std(smoothed)
+            print('vmin = ', vmin, 'and vmax = ', vmax)
             norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
             img = axes[row, col].pcolormesh(smoothed, cmap='seismic', norm=norm)
             axes[row, col].set_xlabel('Time')
