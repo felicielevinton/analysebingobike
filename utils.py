@@ -65,9 +65,19 @@ def get_better_plot_geometry(good_clusters):
     num_plots = len(good_clusters)
     num_cols = int(np.ceil(np.sqrt(num_plots)))
     num_rows = int(np.ceil(num_plots / num_cols))
-    return num_plots, num_rows, num_cols
+    return num_plots, num_rows, 
 
-def get_psth(data, features, t_pre, t_post, bin_width, good_clusters, condition):
+def get_part_psth(psth, good_clusters):
+    res=[] 
+    for trigger in range(len(psth)):
+        res_trig = []
+        for cluster in good_clusters:
+            l = [np.sum(psth[trigger][cluster][x:x+20]) for x in range(0, 140, 20)]
+            res_trig.append(l)   
+        res.append(res_trig)
+    return res
+
+def get_psth(data, features, t_pre, t_post, bin_width, good_clusters, condition,frequency = None):
     """
     Pour voir, pour chaque neurone, les psth
     
@@ -76,10 +86,10 @@ def get_psth(data, features, t_pre, t_post, bin_width, good_clusters, condition)
     output : 
      - une liste contenant le psth moyen par cluster pour chaque changement de fréquence en playback [neurones x chgt de freq x [t_pre, t_post] ]
     """
-    if condition=="tracking":
+    if condition =="tracking":
         c = 0
     elif condition == "playback" : 
-        c=1
+        c= 1
     elif condition== "tail":
         c = -1
     elif condition =="mapping change":
@@ -87,18 +97,33 @@ def get_psth(data, features, t_pre, t_post, bin_width, good_clusters, condition)
     
     
     psth=[] 
+    label = []
     for cluster in good_clusters:
         psth_clus = []
+        label_clus = []
         for bin in range(len(features)):
             #print(diff)
-            if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
-                if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==c :
+            if type(frequency) == int:
+                bool_freq = features[bin]['Played_frequency'] == frequency
+            elif type(frequency) == list :
+                bool_freq = (features[bin]['Played_frequency'] >= frequency[0]) and (features[bin]['Played_frequency'] <= frequency[1])
+            else : 
+                bool_freq = True
+            if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features) and bin+1<len(features):
+                if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==c and bool_freq :
+                    diff_before = features[bin]['Played_frequency'] - features[bin-1]['Played_frequency']
+                    diff_after = features[bin+1]['Played_frequency'] - features[bin]['Played_frequency']
                     psth_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                    label_clus.append([int(diff_before<0),int(diff_after<0)])
         psth.append(psth_clus)
-    return psth
+        label.append(label_clus)
+    return (psth,label)
+
+def bizarre():
+    return 2
 
 
-def get_psth_in_block(data, features, t_pre, t_post, bin_width, good_clusters, block, condition):
+def get_psth_in_block(data, features, t_pre, t_post, bin_width, good_clusters, block, condition,frequency=None):
     """
     Pour voir, pour chaque neurone, les psth
     
@@ -116,18 +141,37 @@ def get_psth_in_block(data, features, t_pre, t_post, bin_width, good_clusters, b
     elif condition =="mapping change":
         c = 2
     
-    
-    psth=[] 
+    psth=[]
+    label = [] 
     for cluster in good_clusters:
+        label_clus = []
         psth_clus = []
         for bin in range(len(features)):
-            #print(diff)
-            if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features):
-                if features[bin]['Block']==block:
-                    if features[bin]['Frequency_changes']>0 and features[bin]['Condition']==c :
+            if c == 0:
+                change = features[bin]['Frequency_changes']
+            if c == 1:
+                change = features[bin]['Mock_change']
+            if type(frequency) == int:
+                bool_freq = features[bin]['Played_frequency'] == frequency
+            elif type(frequency) == list :
+                bool_freq = (features[bin]['Played_frequency'] >= frequency[0]) and (features[bin]['Played_frequency'] <= frequency[1])
+            else : 
+                bool_freq = True
+            if bin-int(t_pre/bin_width)>0 and bin+int(t_post/bin_width)<len(features) and bin+1<len(features):
+                if features[bin]['Block']==block and features[bin-1]['Block']==block:
+                    if change and features[bin]['Condition']==c and bool_freq:
+                        if c == 0:
+                            diff_before = features[bin]['Played_frequency'] - features[bin-1]['Played_frequency']
+                            diff_after = features[bin+1]['Played_frequency'] - features[bin]['Played_frequency']
+                        if c == 1:
+                            diff_before = features[bin]['Mock_frequency'] - features[bin-1]['Mock_frequency']
+                            diff_after = features[bin+1]['Mock_frequency'] - features[bin]['Mock_frequency']
                         psth_clus.append(data[cluster][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
+                        label_clus.append([int(diff_before<0),int(diff_after<0)])
         psth.append(psth_clus)
-    return psth
+        label.append(label_clus)
+    return psth, label
+
 
 def get_played_frequency(features, t_pre, t_post, bin_width, condition):
     """"
@@ -175,7 +219,11 @@ def get_sustained_activity(psth, t_pre, t_post, bin_width):
     
     
     """
-    return (np.nanmean(psth[0: int(t_pre/bin_width)-2]))
+    sustained_activities = [
+        np.nanmean(p[0: int(t_pre/bin_width)-2]) for p in psth
+    ]
+    
+    return sustained_activities
 
 
 
@@ -266,8 +314,10 @@ def get_total_evoked_response(psth, t_pre, t_post, bin_width, thresh, t0, t1):
     """
     total_evoked_response = []
     for elt in psth:
+        print(elt)
+        print(elt.shape)
         total_evoked_response.append(mean_maxima(elt, thresh, t0,t1)[0])
-        #total_evoked_response.append(np.max(elt))
+        total_evoked_response.append(np.max(elt))
     return total_evoked_response
 
 
