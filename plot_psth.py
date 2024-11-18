@@ -11,6 +11,7 @@ import numpy as np
 from format_data import *
 from utils import *
 import pickle as pkl
+import pickle as pkl
 
 t_pre = 0.5#0.2
 t_post = 0.50#0.300
@@ -21,8 +22,20 @@ psth_bins = np.arange(-t_pre, t_post, bin_width)
 
 path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240806_SESSION_00/'
 
-session_type = 'Playback'# PlaybackOnly TrackingOnly Playback 'MappingChange'
+data = np.load(path+f'headstage_0/data_{bin_width}.npy', allow_pickle=True)
+features = np.load(path+f'headstage_0/features_{bin_width}.npy', allow_pickle=True)
+gc = np.load(path+'headstage_0/good_clusters.npy', allow_pickle=True)
+#gc = np.arange(0, 32)
 
+if session_type=='Playback':
+    tail = get_psth(data, features, t_pre, t_post, bin_width, gc, 'tail')
+    tracking = get_psth(data, features, t_pre, t_post, bin_width, gc, 'tracking')
+    mc = get_psth(data, features, t_pre, t_post, bin_width, gc, 'mapping change')
+    playback = get_psth(data, features, t_pre, t_post, bin_width, gc, 'playback') 
+    np.save(path+'headstage_0/psth_tracking_0.005.npy', tracking)
+    np.save(path+'headstage_0/psth_playback_0.005.npy', playback)
+    np.save(path+'headstage_0/psth_mappingchange_0.005.npy', mc) 
+    np.save(path+'headstage_0/psth_tail_0.005.npy', tail)
 
 # pour plot cluster par cluster16
 fig, axes = plt.subplots(4, 8, figsize=(16, 8))
@@ -80,10 +93,17 @@ if session_type=='Playback':
     # la moyenne sur tous les clusters
     c_tracking = np.nanmean(tracking, axis=0)
     c_playback = np.nanmean(playback, axis=0)
+    # la moyenne sur tous les clusters
+    c_tracking = np.nanmean(tracking, axis=0)
+    c_playback = np.nanmean(playback, axis=0)
 
     m_tracking = np.nanmean(c_tracking, axis=0)
     m_playback = np.nanmean(c_playback, axis=0)
+    m_tracking = np.nanmean(c_tracking, axis=0)
+    m_playback = np.nanmean(c_playback, axis=0)
 
+    sem_tr = get_sem(c_tracking)
+    sem_pb = get_sem(c_playback)
     sem_tr = get_sem(c_tracking)
     sem_pb = get_sem(c_playback)
 
@@ -226,4 +246,5 @@ if session_type=='MappingChange':
     plt.gca().spines['right'].set_visible(False)
     plt.legend()
 
+    plt.savefig(path+'headstage_0/psth_average.png')
     plt.savefig(path+'headstage_0/psth_average.png')
