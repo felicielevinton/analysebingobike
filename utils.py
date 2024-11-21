@@ -3,6 +3,38 @@ from scipy.signal import find_peaks
 import os
 import json
 
+def match_triggers(features):
+    """"
+    Fonction pour faire matcher les triggers entre les blocks de tracking et de playback
+    input : features
+    ouptut : un dictionnaire qui, pour chaque block, renvoie les indices de triggers en tracking et les indices de triggers en playabck correspondant
+    """
+    matching_triggers = {} 
+
+    blocks = np.array([elt['Block'] for elt in features])
+    conditions = np.array([elt['Condition'] for elt in features])
+    played_tones = np.array([elt['Played_frequency'] for elt in features])
+    frequency_changes = np.array([elt['Frequency_changes'] for elt in features])
+
+    for block in np.sort(np.unique(blocks)):
+
+        indices_tracking_fc = np.where((frequency_changes == True) & (conditions == 0) & (blocks == block))[0] # récupérer les indices où on a un changement de fréquence dans le block de tracking
+        indices_playback_fc = np.where((frequency_changes == True) & (conditions == 1) & (blocks == block))[0] # récupérer les indices où on a un changement de fréquence dans le block de playback
+        # ici j'ai un ton de playabck en plus que dans le trackinhc chelou
+        if len(indices_playback_fc)>len(indices_tracking_fc):
+            # je retire le premier ton de playback
+            indices_playback_fc = indices_playback_fc[1:]
+        if len(indices_playback_fc)<len(indices_tracking_fc):
+            #je retirer le premier ton de tracking
+            indices_tracking_fc = indices_tracking_fc[1:]
+
+        matching_triggers[int(block)] = {
+            'idx_tracking': indices_tracking_fc.tolist(),
+            'idx_playback': indices_playback_fc.tolist()
+        }
+  
+    return matching_triggers
+
 
 def est_premier(nombre):
     if nombre <= 1:

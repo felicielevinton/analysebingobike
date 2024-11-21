@@ -71,9 +71,11 @@ def get_tonotopy(data, features, t_pre, t_post, bin_width, good_clusters, unique
         
         for tone in unique_tones:
             mask = (tones == tone)
+            print('tonres')
             if len(clus_psth[mask])>0: #au moins 20 présentations d'une fréquence
                 average_psth = np.mean(clus_psth[mask], axis=0)
                 average_psth_list.append(average_psth)
+                print(average_psth)
             else:
                 average_psth_list.append(np.zeros_like(psth_bins[:-1]))
     
@@ -260,7 +262,7 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
                         test = contour[:, 0]
                         if maxf<len(unique_tones)-1:
                             maxf+=1
-            axes[row, col].plot(x_c, y_c, linewidth=2, color='green')
+            #axes[row, col].plot(x_c, y_c, linewidth=2, color='green')
             #print(plotted_freq[int(min)], plotted_freq[int(max)])
             # je mets np.nan dans bandwidth si je ne trouve pas de contour
             if max_length==0 or maxf==0:

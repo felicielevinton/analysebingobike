@@ -32,8 +32,12 @@ path = '/auto/data2/eTheremin/MUROLS/MUROLS_20230221/MUROLS_20230221_SESSION_00'
 #session = '/MMELOIK_20241107_SESSION_00'
 # path = '/auto/data6/eTheremin/MMELOIK/'+ session + '/'
 
+<<<<<<< HEAD
 path = '/auto/data2/eTheremin/ALTAI/ALTAI_20240806_SESSION_00/'
 >>>>>>> 283d6daf (pôsitions)
+=======
+path = '/auto/data6/eTheremin/MMELOIK/MMELOIK_20241119_SESSION_01/'
+>>>>>>> ac008e19 (nouveau matching triggers tool)
 
 t_pre = 0.5#0.2
 t_post = 0.50#0.300
