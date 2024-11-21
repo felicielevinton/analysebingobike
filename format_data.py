@@ -190,14 +190,9 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
     
     if condition=="tracking":
         c = 0
-<<<<<<< HEAD
-    else : 
-        c=1   
-=======
     elif condition=="playback":
         c=1
         
->>>>>>> 283d6daf (pôsitions)
     
     in_psth, out_psth=[] , []
     for idx, cluster in enumerate(good_clusters):
@@ -213,15 +208,9 @@ def get_mean_psth_in_bandwidth(data, features, bandwidth, t_pre, t_post, bin_wid
                         out_clus.append(data[idx][bin-int(t_pre/bin_width):bin+int(t_post/bin_width)])
         print(len(psth_clus))
         print(len(out_clus))
-<<<<<<< HEAD
-        if len(psth_clus)<10:
-            psth_clus = [[np.nan]*(len(psth_bins)-1)]*2
-        if len(out_clus)<10:
-=======
         if len(psth_clus)==0:
             psth_clus = [[np.nan]*(len(psth_bins)-1)]*2
         if len(out_clus)==0:
->>>>>>> 283d6daf (pôsitions)
             out_clus = [[np.nan]*(len(psth_bins)-1)]*2
         in_psth.append(np.nanmean(psth_clus, axis=0))
         out_psth.append(np.nanmean(out_clus, axis=0))
