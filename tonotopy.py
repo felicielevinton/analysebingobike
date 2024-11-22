@@ -29,6 +29,7 @@ def smooth_2d(heatmap, n):
     return hm
 
 
+
 def get_tonotopy(data, features, t_pre, t_post, bin_width, good_clusters, unique_tones, max_freq, min_freq, condition, save_name):
     """""
     
@@ -61,8 +62,8 @@ def get_tonotopy(data, features, t_pre, t_post, bin_width, good_clusters, unique
     tones = np.array(tones)
     tones = [int(x) for x in tones]
     unique_tones_test = np.unique(tones)
-    unique_tones = [int(x) for x in unique_tones]
-    
+    unique_tones = np.array([int(x) for x in unique_tones])
+
     heatmaps = []
 
     for c, clus in enumerate(good_clusters):  
@@ -70,8 +71,8 @@ def get_tonotopy(data, features, t_pre, t_post, bin_width, good_clusters, unique
         average_psth_list = []
         
         for tone in unique_tones:
+
             mask = (tones == tone)
-            print('tonres')
             if len(clus_psth[mask])>0: #au moins 20 présentations d'une fréquence
                 average_psth = np.mean(clus_psth[mask], axis=0)
                 average_psth_list.append(average_psth)
@@ -94,7 +95,6 @@ def get_tonotopy(data, features, t_pre, t_post, bin_width, good_clusters, unique
         #heatmap = average_psths_array-mu
         heatmap = average_psths_array 
         heatmaps.append(heatmap)
-        np.save(save_name, np.array(heatmaps))
     
     return heatmaps
 

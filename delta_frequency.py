@@ -101,6 +101,7 @@ def get_delta_f(data, features, t_pre, t_post, bin_width, good_clusters):
                 diff = math.log2(features[bin]['Played_frequency']/features[bin]['Mock_frequency'])
                 delta_f.append(diff)
         psth.append(psth_clus)
+    delta_f = [0 if np.isinf(x) else x for x in delta_f]
     return psth, delta_f
 
 def get_delta_f_in_block(data, features, t_pre, t_post, bin_width, good_clusters, block):
@@ -225,7 +226,7 @@ def plot_psth_function_of_deltaf(psth, deltaf, octave_threshold, good_clusters, 
             2)le psth moyen par octave de deltaf
     """""
     average, intervals = deltaf_for_cluster(psth, deltaf, octave_threshold, good_clusters)
-    for interval in range(len(average[0])):
+    for interval in range(len(average[0])-1):
         psth_interval = [ligne[interval] for ligne in average]
         sem_interval = get_sem(np.array(psth_interval))
         
@@ -233,9 +234,9 @@ def plot_psth_function_of_deltaf(psth, deltaf, octave_threshold, good_clusters, 
 
         
 
-        plt.plot(psth_bins[:-1], average_interval, label = f'{intervals[interval]} octave(s)', c = colors[interval])
-        plt.fill_between(psth_bins[:-1], np.array(average_interval) - np.array(sem_interval), np.array(average_interval) + np.array(sem_interval), alpha=0.2, color = colors[interval])
-        plt.fill_between(psth_bins[:-1], np.array(average_interval) - np.array(sem_interval), np.array(average_interval) + np.array(sem_interval), alpha=0.2, color = colors[interval])
+        plt.plot(psth_bins, average_interval, label = f'{intervals[interval]} octave(s)', c = colors[interval])
+        plt.fill_between(psth_bins, np.array(average_interval) - np.array(sem_interval), np.array(average_interval) + np.array(sem_interval), alpha=0.2, color = colors[interval])
+        plt.fill_between(psth_bins, np.array(average_interval) - np.array(sem_interval), np.array(average_interval) + np.array(sem_interval), alpha=0.2, color = colors[interval])
         ax = plt.gca()
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
