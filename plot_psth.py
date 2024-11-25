@@ -19,9 +19,10 @@ bin_width = 0.005
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 #gc = np.arange(0, 32)
 
-path = '/auto/data6/eTheremin/MMELOIK/MMELOIK_20241119_SESSION_01/'
+#path = '/auto/data6/eTheremin/MMELOIK/MMELOIK_20241119_SESSION_01/'
+path = '/Volumes/data2/eTheremin/ALTAI/ALTAI_20240822_SESSION_00/'
 
-session_type = 'Tonotopy'# PlaybackOnly TrackingOnly Playback 'MappingChange'
+session_type = 'Playback'# PlaybackOnly TrackingOnly Playback 'MappingChange' Tonotopy
 
 
 

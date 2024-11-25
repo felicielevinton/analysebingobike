@@ -232,8 +232,8 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
             # Concaténation à l'arrière
             #milieu = np.concatenate((milieu, highf))
 
-            vmin = -3 * np.std(smoothed)
-            vmax = 3 * np.std(smoothed)
+            vmin = -3.5 * np.std(smoothed)
+            vmax = 3.5 * np.std(smoothed)
             print('vmin = ', vmin, 'and vmax = ', vmax)
             norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
             img = axes[row, col].pcolormesh(smoothed, cmap='seismic', norm=norm)
@@ -262,7 +262,7 @@ def plot_heatmap_bandwidth(heatmaps,threshold, gc,unique_tones, min_freq, max_fr
                         test = contour[:, 0]
                         if maxf<len(unique_tones)-1:
                             maxf+=1
-            #axes[row, col].plot(x_c, y_c, linewidth=2, color='green')
+            axes[row, col].plot(x_c, y_c, linewidth=2, color='green')
             #print(plotted_freq[int(min)], plotted_freq[int(max)])
             # je mets np.nan dans bandwidth si je ne trouve pas de contour
             if max_length==0 or maxf==0:

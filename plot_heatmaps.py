@@ -4,7 +4,7 @@ import findpeaks
 from skimage import measure
 import os
 
-path = "/auto/data2/eTheremin/ALTAI/ALTAI_20240822_SESSION_00/"
+path = "/Volumes/data2/eTheremin/ALTAI/ALTAI_20240822_SESSION_00/"
 
 #session = 'MMELOIK_20241029_SESSION_00'
 #path = '/Volumes/data6/eTheremin/MMELOIK/'+ session + '/'
