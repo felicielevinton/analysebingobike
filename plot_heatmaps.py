@@ -4,7 +4,7 @@ import findpeaks
 from skimage import measure
 import os
 
-path = "/Volumes/data2/eTheremin/ALTAI/ALTAI_20240822_SESSION_00/"
+path = '/Volumes/data6/eTheremin/NAPOLEON/NAPOLEON_20241128_SESSION_00/'
 
 #session = 'MMELOIK_20241029_SESSION_00'
 #path = '/Volumes/data6/eTheremin/MMELOIK/'+ session + '/'
@@ -13,8 +13,8 @@ path = "/Volumes/data2/eTheremin/ALTAI/ALTAI_20240822_SESSION_00/"
 #path = '/Volumes/data2/eTheremin/MUROLS/'+ session + '/'
 
 
-t_pre = 0.5#0.2
-t_post = 0.50#0.300
+t_pre = 0.2#0.2
+t_post = 0.30#0.300
 bin_width = 0.005
 # Créer les bins de temps"
 psth_bins = np.arange(-t_pre, t_post, bin_width)
@@ -32,13 +32,13 @@ unique_tones = sorted(np.unique(tones))
 unique_tones = [int(x) for x in unique_tones]
 
 # ne calculer les heatmaps uniquement si on ne trouve pas le fichier heatmaps.npy
-if not os.path.exists(path + f'heatmap_plot_{condition}.npy'):
-    print("calculating heatmaps")
-    heatmaps = get_tonotopy(data, features, t_pre, t_post, bin_width, gc, unique_tones, 0, 0, condition, 'heatmaps')
+#if not os.path.exists(path + f'heatmap_plot_{condition}.npy'):
+print("calculating heatmaps")
+heatmaps = get_tonotopy(data, features, t_pre, t_post, bin_width, gc, unique_tones, 0, 0, condition, 'heatmaps')
 
-else:
-    heatmaps = np.load(path + f'heatmap_plot_{condition}.npy', allow_pickle = True)
-    print('heatmaps already exist')
-print(heatmaps)
+#else:
+   # heatmaps = np.load(path + f'heatmap_plot_{condition}.npy', allow_pickle = True)
+    #print('heatmaps already exist')
+#print(heatmaps)
 #récupérer les heatmaps
 plot_heatmap_bandwidth(heatmaps,3, gc,unique_tones, 2, 2, bin_width, psth_bins, t_pre,path, '', condition)

@@ -62,10 +62,10 @@ def clean_positions(positions):
     return positions
 
 
-session = 'ALTAI_20240822_SESSION_00'
-path = '/auto/data2/eTheremin/ALTAI/'+ session + '/positions'
+session = 'MMELOIK_20241128_SESSION_00'
+path = '/Volumes/data6/eTheremin/MMELOIK/'+ session + '/positions'
 
-folder = '/auto/data2/eTheremin/ALTAI/'+ session +'/'
+folder = '/Volumes/data6/eTheremin/MMELOIK/'+ session +'/'
 
 features = np.load(folder+'headstage_0/features_0.005.npy', allow_pickle=True)
 unique_tones = np.load(folder+'headstage_0/unique_tones.npy', allow_pickle=True)
@@ -74,7 +74,7 @@ unique_tones = np.load(folder+'headstage_0/unique_tones.npy', allow_pickle=True)
 # Lire le json pour trouver les fichiers de positions
 
 # trouver le chemin vers le json
-json_path = folder+'/session_ALTAI_SESSION_00_20240822.json'
+json_path = folder+'/session_MMELOIK_SESSION_00_20241128.json'
 
 # Dictionnaires pour stocker les valeurs de 'Positions_fn' et 'playback' Positions_fn
 positions_tracking = {}
@@ -190,15 +190,38 @@ print(len(binned_positions))
 print(len(features))
 
 
+target_length = len(features)
 
-for i, feature in enumerate(features[:len(binned_condition)]):
+# Fonction pour compléter un tableau avec des np.nan
+def pad_with_nan(array, target_length):
+    if len(array) < target_length:
+        # Calcul de combien de np.nan sont nécessaires
+        padding = target_length - len(array)
+        # Ajouter des np.nan à la fin
+        return np.concatenate([array, np.full(padding, np.nan)])
+    return array  # Si la longueur est déjà correcte, on ne fait rien
+
+# Appliquer la fonction sur chaque tableau
+binned_condition = pad_with_nan(binned_condition, target_length)
+binned_blocks = pad_with_nan(binned_blocks, target_length)
+binned_positions = pad_with_nan(binned_positions, target_length)
+binned_tones = pad_with_nan(binned_tones, target_length)
+
+# Les tableaux sont maintenant de la même longueur que features
+print(len(binned_condition))
+print(len(binned_blocks))
+print(len(binned_positions))
+print(len(features))
+
+
+for i, feature in enumerate(features[:len(features)]):
     feature['Position'] = binned_positions[i]
     feature['Position_frequency'] = binned_tones[i]
     feature['Position_condition'] = binned_condition[i]
     feature['Position_block'] = binned_blocks[i]
 
 
-features = list(features.values())
-np.save(folder+f'/features_{bin_width}.npy', features)
+#features = list(features.values())
+np.save(folder+f'/features_wmotion_{bin_width}.npy', features)
 
 

@@ -16,13 +16,13 @@ bin_width = 0.005
 # Créer les bins de temps"
 psth_bins = np.arange(-t_pre, t_post, bin_width)
 
-path = '/Volumes/data2/eTheremin/ALTAI/ALTAI_20240910_SESSION_00/'
+path = '/Volumes/data6/eTheremin/NAPOLEON/NAPOLEON_20241202_SESSION_03/headstage_1/'
 
-data = np.load(path+'headstage_0/data_0.005.npy', allow_pickle=True)
-features = np.load(path+'headstage_0/features_0.005.npy', allow_pickle=True)
-gc = np.load(path+'headstage_0/good_clusters.npy', allow_pickle=True)
+data = np.load(path+'/data_0.005.npy', allow_pickle=True)
+features = np.load(path+'/features_0.005.npy', allow_pickle=True)
+gc = np.load(path+'/good_clusters.npy', allow_pickle=True)
 
-tracking = get_psth(data, features, t_pre, t_post, bin_width, gc, 'tail')
+tracking = get_psth(data, features, t_pre, t_post, bin_width, gc, 'tracking')
 
 n = int(len(tracking[0])/2)
 tracking = np.array(tracking)
@@ -44,7 +44,7 @@ for n, cluster in enumerate(gc):
         axes[row, col].spines['top'].set_visible(False)
         axes[row, col].spines['right'].set_visible(False)
 #plt.legend()
-plt.savefig(path+'headstage_0/tracking_evolution_psth_cluster.png')
+plt.savefig(path+'/tracking_evolution_psth_cluster.png')
 plt.close()
 
 # la moyenne sur tous les clusters
@@ -68,5 +68,5 @@ plt.ylabel('[spikes/s]')
 plt.gca().spines['top'].set_visible(False)
 plt.gca().spines['right'].set_visible(False)
 plt.legend()
-plt.savefig(path+'headstage_0/tracking_evolution_average.png')
+plt.savefig(path+'/tracking_evolution_average.png')
 plt.close()

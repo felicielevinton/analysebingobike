@@ -16,19 +16,19 @@ t_pre = 0.2#0.2
 t_post = 0.70#0.300
 bin_width = 0.005
 # Créer les bins de temps"
-psth_bins = np.arange(-t_pre, t_post, bin_width)
+psth_bins = np.arange(-t_pre, t_post, bin_width)    
 #gc = np.arange(0, 32)
 
-#path = '/auto/data6/eTheremin/MMELOIK/MMELOIK_20241119_SESSION_01/'
-path = '/Volumes/data2/eTheremin/ALTAI/ALTAI_20240822_SESSION_00/'
+path = '/Volumes/data6/eTheremin/NAPOLEON/NAPOLEON_20241202_SESSION_03/headstage_0/'
+#path = '/Volumes/data2/eTheremin/ALTAI/ALTAI_20240822_SESSION_00/'
 
 session_type = 'Playback'# PlaybackOnly TrackingOnly Playback 'MappingChange' Tonotopy
 
 
 
-data = np.load(path+f'headstage_0/data_{bin_width}.npy', allow_pickle=True)
-features = np.load(path+f'headstage_0/features_{bin_width}.npy', allow_pickle=True)
-gc = np.load(path+'headstage_0/good_clusters.npy', allow_pickle=True)
+data = np.load(path+f'/data_{bin_width}.npy', allow_pickle=True)
+features = np.load(path+f'/features_{bin_width}.npy', allow_pickle=True)
+gc = np.load(path+'/good_clusters.npy', allow_pickle=True)
 #gc = np.arange(0, 32)
 
 if session_type=='Playback':
@@ -36,10 +36,10 @@ if session_type=='Playback':
     tracking = get_psth(data, features, t_pre, t_post, bin_width, gc, 'tracking')
     mc = get_psth(data, features, t_pre, t_post, bin_width, gc, 'mapping change')
     playback = get_psth(data, features, t_pre, t_post, bin_width, gc, 'playback') 
-    np.save(path+'headstage_0/psth_tracking_0.005.npy', tracking)
-    np.save(path+'headstage_0/psth_playback_0.005.npy', playback)
-    np.save(path+'headstage_0/psth_mappingchange_0.005.npy', mc) 
-    np.save(path+'headstage_0/psth_tail_0.005.npy', tail)
+    np.save(path+'/psth_tracking_0.005.npy', tracking)
+    np.save(path+'/psth_playback_0.005.npy', playback)
+    np.save(path+'/psth_mappingchange_0.005.npy', mc) 
+    np.save(path+'/psth_tail_0.005.npy', tail)
 
     # pour plot cluster par cluster16
     fig, axes = plt.subplots(4, 8, figsize=(16, 8))
@@ -60,7 +60,7 @@ if session_type=='Playback':
             axes[row, col].set_title(f'Cluster {cluster}')
             axes[row, col].spines['top'].set_visible(False)
             axes[row, col].spines['right'].set_visible(False)
-    plt.savefig(path+'headstage_0/psth_cluster.png')
+    plt.savefig(path+'/psth_cluster.png')
     plt.close()
 
     # la moyenne sur tous les clusters
@@ -84,13 +84,13 @@ if session_type=='Playback':
     plt.gca().spines['right'].set_visible(False)
     plt.legend()
 
-    plt.savefig(path+'headstage_0/psth_average.png')
+    plt.savefig(path+'/psth_average.png')
 
 
 
 elif session_type == 'TrackingOnly':
     tracking = get_psth(data, features, t_pre, t_post, bin_width, gc, 'tail') # la condition c'est -1 quand on est en tracking only
-    np.save(path+'headstage_0/psth_tracking_0.005.npy', tracking)
+    np.save(path+'/psth_tracking_0.005.npy', tracking)
 
     fig, axes = plt.subplots(4, 8, figsize=(16, 8))
     fig.suptitle('tracking', y=1.02)
@@ -105,7 +105,7 @@ elif session_type == 'TrackingOnly':
             axes[row, col].set_title(f'Cluster {cluster}')
             axes[row, col].spines['top'].set_visible(False)
             axes[row, col].spines['right'].set_visible(False)
-    plt.savefig(path+'headstage_0/psth_cluster.png')
+    plt.savefig(path+'/psth_cluster.png')
     plt.close()
 
     # la moyenne sur tous les clusters
@@ -124,11 +124,11 @@ elif session_type == 'TrackingOnly':
     plt.gca().spines['right'].set_visible(False)
     plt.legend()
 
-    plt.savefig(path+'headstage_0/psth_average.png')
+    plt.savefig(path+'/psth_average.png')
 
 elif session_type == 'PlaybackOnly':
     playback = get_psth(data, features, t_pre, t_post, bin_width, gc, 'playback')
-    np.save(path+'headstage_0/psth_tracking_0.005.npy', playback)
+    np.save(path+'/psth_tracking_0.005.npy', playback)
 
     fig, axes = plt.subplots(4, 8, figsize=(16, 8))
     fig.suptitle('playback', y=1.02)
@@ -143,7 +143,7 @@ elif session_type == 'PlaybackOnly':
             axes[row, col].set_title(f'Cluster {cluster}')
             axes[row, col].spines['top'].set_visible(False)
             axes[row, col].spines['right'].set_visible(False)
-    plt.savefig(path+'headstage_0/psth_cluster.png')
+    plt.savefig(path+'/psth_cluster.png')
     plt.close()
 
     # la moyenne sur tous les clusters
@@ -162,14 +162,14 @@ elif session_type == 'PlaybackOnly':
     plt.gca().spines['right'].set_visible(False)
     plt.legend()
 
-    plt.savefig(path+'headstage_0/psth_average.png')
+    plt.savefig(path+'/psth_average.png')
 
 
 
 
 elif session_type == 'Tonotopy':
     tracking = get_psth(data, features, t_pre, t_post, bin_width, gc, 'tracking') # la condition c'est 0 quand on est en tonotopy
-    np.save(path+'headstage_0/psth_tracking_0.005.npy', tracking)
+    np.save(path+'/psth_tracking_0.005.npy', tracking)
 
     fig, axes = plt.subplots(4, 8, figsize=(16, 8))
     fig.suptitle('tracking', y=1.02)
@@ -184,7 +184,7 @@ elif session_type == 'Tonotopy':
             axes[row, col].set_title(f'Cluster {cluster}')
             axes[row, col].spines['top'].set_visible(False)
             axes[row, col].spines['right'].set_visible(False)
-    plt.savefig(path+'headstage_0/psth_cluster.png')
+    plt.savefig(path+'/psth_cluster.png')
     plt.close()
 
     # la moyenne sur tous les clusters
@@ -203,16 +203,16 @@ elif session_type == 'Tonotopy':
     plt.gca().spines['right'].set_visible(False)
     plt.legend()
 
-    plt.savefig(path+'headstage_0/psth_average.png')
+    plt.savefig(path+'/psth_average.png')
 
 
 if session_type=='MappingChange':
     tail = get_psth(data, features, t_pre, t_post, bin_width, gc, 'tail')
     tracking = get_psth(data, features, t_pre, t_post, bin_width, gc, 'tracking')
     mc = get_psth(data, features, t_pre, t_post, bin_width, gc, 'mapping change')
-    np.save(path+'headstage_0/psth_tracking_0.005.npy', tracking)
-    np.save(path+'headstage_0/psth_mappingchange_0.005.npy', mc) 
-    np.save(path+'headstage_0/psth_tail_0.005.npy', tail)
+    np.save(path+'/psth_tracking_0.005.npy', tracking)
+    np.save(path+'/psth_mappingchange_0.005.npy', mc) 
+    np.save(path+'/psth_tail_0.005.npy', tail)
 
     # pour plot cluster par cluster16
     fig, axes = plt.subplots(4, 8, figsize=(16, 8))
@@ -229,7 +229,7 @@ if session_type=='MappingChange':
             axes[row, col].set_title(f'Cluster {cluster}')
             axes[row, col].spines['top'].set_visible(False)
             axes[row, col].spines['right'].set_visible(False)
-    plt.savefig(path+'headstage_0/psth_cluster.png')
+    plt.savefig(path+'/psth_cluster.png')
     plt.close()
 
     # la moyenne sur tous les clusters
@@ -253,4 +253,4 @@ if session_type=='MappingChange':
     plt.gca().spines['right'].set_visible(False)
     plt.legend()
 
-    plt.savefig(path+'headstage_0/psth_average.png')
+    plt.savefig(path+'/psth_average.png')
